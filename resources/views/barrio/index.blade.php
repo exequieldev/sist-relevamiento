@@ -1,46 +1,40 @@
 @extends('adminlte::page')
 
 @section('content')
-  <h1>Relevamiento</h1>
+  <!--Encabezado-->
+  <h1>Barrios</h1>
+
+  <!--Botones-->
   <div style="margin: 6px">
-    <button style="background: green; color:white; width: 100px" class="form-control">Nuevo</button>
+    <button style="background: green; width: 100px; text-decoration: none; color:white" class="form-control">
+      <a href="{{ url('/barrio/create') }}">Nuevo</a>
+    </button>
   </div>
+
+  <!--Lista de Barrios-->
   <table class="table ">
+
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
-        <th scope="col">Action</th>
+        <th scope="col">Nombres</th>
+        <th scope="col">Opciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td>
-          <ul>
-            <li>Editar</li>
-            <li>Ver</li>
-            <li>Eliminar</li>
-          </ul>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
-      </tr>
+      
+        <tr>
+          <th scope="row">1</th>
+          <td>{{$barrios->nombre}}</td>
+          <td>
+            <ul>
+              <li><a href="{{url('/barrio/edit')}}">Edit</a></li>
+              <li><a href="{{url('/barrio/show')}}">Mostrar</a></li>
+              <li><a href="#">Eliminar</a></li>
+            </ul>
+          </td>
+        </tr>
+
     </tbody>
   </table>
 @stop
