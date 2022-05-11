@@ -13,7 +13,7 @@ class InicioController extends Controller
      */
     public function index()
     {
-        dd('Prueba 1');
+        
         return view('barrio.index');
     }
 
