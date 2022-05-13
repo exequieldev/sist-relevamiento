@@ -2,39 +2,39 @@
 
 @section('content')
   <!--Encabezado-->
-  <h1>Barrios</h1>
-
-  <!--Botones-->
-  <div style="margin: 6px">
-    <button style="background: green; width: 100px; text-decoration: none; color:white" class="form-control">
-      <a href="{{ url('/barrio/create') }}">Nuevo</a>
-    </button>
+  <div class="row">
+    <h1>Barrios <a href={{url('barrio/create')}}><button class="btn btn-success">Nuevo</button></a></h1>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-8 col-sm-8 col-sx-8 ">
+      <div class="table-responsive">
+        <table class="table table-streped table-bordered table-condensed table-hover">
+            <thead>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Opciones</th>
+            </thead>
+            @foreach ($barrios as $barrio)
+              <tr>
+                <td>{{$barrio->idBarrio}}</td>
+                <td>{{$barrio->nombre}}</td>
+                <td>
+                  <ul class="list-unstyled list-group list-group-horizontal">
+                    <li><a href="#"><button class="btn btn-info" >Editar</button></a></li>
+                    <li><a href="#"><button class="btn btn-danger">Eliminar</button></a></li>
+                  </ul>
+                </td>
+              </tr>
+            @endforeach   
+        </table>
+    </div>
+    {{$barrios->render()}}
+    </div>
   </div>
 
-  <!--Lista de Barrios-->
-  <table class="table ">
 
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Nombres</th>
-        <th scope="col">Opciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-        <tr>
-          <th scope="row">1</th>
-          <td>{{$barrios->nombre}}</td>
-          <td>
-            <ul>
-              <li><a href="{{url('/barrio/edit')}}">Edit</a></li>
-              <li><a href="{{url('/barrio/show')}}">Mostrar</a></li>
-              <li><a href="#">Eliminar</a></li>
-            </ul>
-          </td>
-        </tr>
+  
 
-    </tbody>
-  </table>
+  
+  
 @stop

@@ -17,7 +17,9 @@ use App\Http\Controllers\BarrioController;
 Route::get('/', function () {
     return view('welcome');
 });
-
+/*
 Route::get('inicio',[InicioController::class,'index']);
 Route::get('/barrio',[BarrioController::class,'index']);
 Route::get('/barrio/create',[BarrioController::class,'create']);
+*/
+Route::resource('/barrio',BarrioController::class);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Barrio;
+use DB;
 
 class BarrioController extends Controller
 {
@@ -14,11 +15,14 @@ class BarrioController extends Controller
      */
     public function index()
     {
-        $barrios = new Barrio;
-        $barrios->nombre = "Exequiel";
 
 
-        return view('barrio.index', compact('barrios'));
+        
+
+       $barrios=Barrio::orderBy('idBarrio','desc')->where('estado',1)->paginate(5);
+       return view('barrio.index', ['barrios'=>$barrios]);
+
+        
     }
 
     /**
@@ -28,6 +32,7 @@ class BarrioController extends Controller
      */
     public function create()
     {
+        
         return view('barrio.create');
     }
 
@@ -39,7 +44,13 @@ class BarrioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $barrio = new Barrio;
+        $barrio->nombre = $request->get('nombre');
+        $barrio->save();
+
+        return redirect()->route('barrio.index');
+        
     }
 
     /**
@@ -50,7 +61,9 @@ class BarrioController extends Controller
      */
     public function show($id)
     {
-        //
+        $barrio = Barrio::findOrFail($id);
+
+        return view('barrio.show',['barrio'=>$barrio]);
     }
 
     /**
@@ -61,7 +74,9 @@ class BarrioController extends Controller
      */
     public function edit($id)
     {
-        //
+        $barrio = Barrio::findOrFail($id);
+
+        return view('barrio.edit',['barrio'=>$barrio]);
     }
 
     /**
@@ -73,7 +88,12 @@ class BarrioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $barrio = Barrio::findOrFail($id);
+        $barrio->nombre = $request->get('nombre');
+        $barrio->update();
+
+        return redirect()->route('barrio.index');
+        
     }
 
     /**
@@ -84,6 +104,9 @@ class BarrioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $barrio = Barrio::findOrFail($id);
+        $barrio->estado=false;
+
+        return redirect()->route('barrio.index');
     }
 }

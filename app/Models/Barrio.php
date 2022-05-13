@@ -11,7 +11,10 @@ class Barrio extends Model
 
     protected $table = "barrios";
 
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre','estado'];
+
+    public $timestamp=true;
 
     protected $guarded = [];
+
 }
