@@ -22,4 +22,6 @@ Route::get('inicio',[InicioController::class,'index']);
 Route::get('/barrio',[BarrioController::class,'index']);
 Route::get('/barrio/create',[BarrioController::class,'create']);
 */
+//Route::put('barrio/{id}',[BarrioController::class,'update'])->name('barrio.update');
+
 Route::resource('/barrio',BarrioController::class);

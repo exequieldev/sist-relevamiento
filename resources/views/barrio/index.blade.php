@@ -19,10 +19,16 @@
                 <td>{{$barrio->idBarrio}}</td>
                 <td>{{$barrio->nombre}}</td>
                 <td>
-                  <ul class="list-unstyled list-group list-group-horizontal">
-                    <li><a href="#"><button class="btn btn-info" >Editar</button></a></li>
-                    <li><a href="#"><button class="btn btn-danger">Eliminar</button></a></li>
-                  </ul>
+                      <div class="btn-toolbar">
+                          <a href="{{url('barrio/'.$barrio->idBarrio.'/edit')}}"><button class="btn btn-info" ><i class="fas fa-edit"></i></button></a>
+                          <a href="#">
+                              <form action="{{route('barrio.destroy',$barrio->idBarrio)}}" method="POST">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                              </form>
+                          </a>
+                      </div>
                 </td>
               </tr>
             @endforeach   

@@ -47,6 +47,7 @@ class BarrioController extends Controller
 
         $barrio = new Barrio;
         $barrio->nombre = $request->get('nombre');
+        $barrio->estado = 1;
         $barrio->save();
 
         return redirect()->route('barrio.index');
@@ -105,8 +106,13 @@ class BarrioController extends Controller
     public function destroy($id)
     {
         $barrio = Barrio::findOrFail($id);
-        $barrio->estado=false;
+        $barrio->estado=0;
+        $barrio->update();
+        
+
 
         return redirect()->route('barrio.index');
     }
+
+    
 }
