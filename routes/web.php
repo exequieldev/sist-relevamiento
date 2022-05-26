@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\BarrioController;
+use App\Http\Controllers\ManzanaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,4 +25,31 @@ Route::get('/barrio/create',[BarrioController::class,'create']);
 */
 //Route::put('barrio/{id}',[BarrioController::class,'update'])->name('barrio.update');
 
+
 Route::resource('/barrio',BarrioController::class);
+Route::resource('/manzana',ManzanaController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+Route::resource('/barrio',BarrioController::class);
+

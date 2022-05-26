@@ -255,6 +255,16 @@ return [
         ],
         ['header' => 'account_settings'],
         [
+            'text' => 'Barrios',
+            'url'  => '/barrio',
+            'icon' => 'fas fa-home ',
+        ],
+        [
+            'text' => 'Manzanas',
+            'url'  => '/manzana',
+            'icon' => 'fas fa-map',
+        ],
+        [
             'text' => 'profile',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',

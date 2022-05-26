@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Barrio;
+use App\Models\Manzana;
 use DB;
+use Illuminate\Http\Request;
 
-class BarrioController extends Controller
+class ManzanaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,11 +15,8 @@ class BarrioController extends Controller
      */
     public function index()
     {
-
-       $barrios=Barrio::orderBy('idBarrio','desc')->where('estado',1)->paginate(5);
-       return view('barrio.index', ['barrios'=>$barrios]);
-
-        
+        $manzanas=Manzana::orderBy('idManzana','desc')->where('estado',1)->paginate(5);
+       return view('manzana.index', ['manzanas'=>$manzanas]);
     }
 
     /**
@@ -29,8 +26,7 @@ class BarrioController extends Controller
      */
     public function create()
     {
-        
-        return view('barrio.create');
+        return view('manzana.create');
     }
 
     /**
@@ -41,75 +37,68 @@ class BarrioController extends Controller
      */
     public function store(Request $request)
     {
+        $manzana = new Manzana;
+        $manzana->descripcion = $request->get('descripcion');
+        $manzana->estado = 1;
+        $manzana->save();
 
-        $barrio = new Barrio;
-        $barrio->nombre = $request->get('nombre');
-        $barrio->estado = 1;
-        $barrio->save();
-
-        return redirect()->route('barrio.index');
-        
+        return redirect()->route('manzana.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Manzana  $manzana
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $barrio = Barrio::findOrFail($id);
+        $manzana = Manzana::findOrFail($id);
 
-        return view('barrio.show',['barrio'=>$barrio]);
+        return view('manzana.show',['manzana'=>$manzana]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Manzana  $manzana
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $barrio = Barrio::findOrFail($id);
+        $manzana = Manzana::findOrFail($id);
 
-        return view('barrio.edit',['barrio'=>$barrio]);
+        return view('manzana.edit',['manzana'=>$manzana]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Manzana  $manzana
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $barrio = Barrio::findOrFail($id);
-        $barrio->nombre = $request->get('nombre');
-        $barrio->update();
+        $manzana = Manzana::findOrFail($id);
+        $manzana->descripcion = $request->get('descripcion');
+        $manzana->update();
 
-        return redirect()->route('barrio.index');
-        
+        return redirect()->route('manzana.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Manzana  $manzana
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $barrio = Barrio::findOrFail($id);
-        $barrio->estado=0;
-        $barrio->update();
-        
+        $manzana = Manzana::findOrFail($id);
+        $manzana->estado=0;
+        $manzana->update();
 
-
-        return redirect()->route('barrio.index');
+        return redirect()->route('manzana.index');
     }
-
-    
 }
