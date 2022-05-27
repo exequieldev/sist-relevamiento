@@ -14,7 +14,10 @@ class CasaController extends Controller
      */
     public function index()
     {
-        //
+        $casas=Casa::orderBy('idCasa','desc')->where('estado',1)->paginate(5);
+
+        return view('casa.index', ['casas'=>$casas]);
+
     }
 
     /**
@@ -24,7 +27,7 @@ class CasaController extends Controller
      */
     public function create()
     {
-        //
+        return view('casa.create');
     }
 
     /**
@@ -35,7 +38,12 @@ class CasaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $casa = new Casa;
+        $casa->nombre = $request->get('nombre');
+        $casa->estado = 1;
+        $casa->save();
+
+        return redirect()->route('casa.index');
     }
 
     /**
@@ -46,7 +54,9 @@ class CasaController extends Controller
      */
     public function show(Casa $casa)
     {
-        //
+        $casa = Casa::findOrFail($id);
+
+        return view('casa.show',['casa'=>$casa]);
     }
 
     /**
@@ -57,7 +67,9 @@ class CasaController extends Controller
      */
     public function edit(Casa $casa)
     {
-        //
+        $casa = Casa::findOrFail($id);
+
+        return view('casa.edit',['casa'=>$casa]);
     }
 
     /**
@@ -69,7 +81,11 @@ class CasaController extends Controller
      */
     public function update(Request $request, Casa $casa)
     {
-        //
+        $casa = Casa::findOrFail($id);
+        $casa->nombre = $request->get('nombre');
+        $casa->update();
+
+        return redirect()->route('casa.index');
     }
 
     /**
@@ -78,8 +94,12 @@ class CasaController extends Controller
      * @param  \App\Models\Casa  $casa
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Casa $casa)
+    public function destroy($id)
     {
-        //
+        $csa = Casa::findOrFail($id);
+        $casa->estado=0;
+        $casa->update();
+
+        return redirect()->route('casa.index');
     }
 }
