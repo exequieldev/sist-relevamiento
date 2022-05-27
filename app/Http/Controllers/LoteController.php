@@ -14,7 +14,8 @@ class LoteController extends Controller
      */
     public function index()
     {
-        //
+        $lotes=Lote::orderBy('idLote','desc')->where('estado',1)->paginate(5);
+        return view('lote.index', ['lotes'=>$lotes]);
     }
 
     /**
@@ -24,7 +25,7 @@ class LoteController extends Controller
      */
     public function create()
     {
-        //
+        return view('lote.create');
     }
 
     /**
@@ -35,7 +36,12 @@ class LoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $lote = new Lote;
+        $lote->numero = $request->get('numero');
+        $lote->estado = 1;
+        $lote->save();
+
+        return redirect()->route('lote.index');
     }
 
     /**
@@ -44,9 +50,11 @@ class LoteController extends Controller
      * @param  \App\Models\Lote  $lote
      * @return \Illuminate\Http\Response
      */
-    public function show(Lote $lote)
+    public function show($id)
     {
-        //
+        $lote = Lote::findOrFail($id);
+
+        return view('lote.show',['lote'=>$lote]);
     }
 
     /**
@@ -55,9 +63,11 @@ class LoteController extends Controller
      * @param  \App\Models\Lote  $lote
      * @return \Illuminate\Http\Response
      */
-    public function edit(Lote $lote)
+    public function edit($id)
     {
-        //
+        $lote = Lote::findOrFail($id);
+
+        return view('lote.edit',['lote'=>$lote]);
     }
 
     /**
@@ -67,9 +77,13 @@ class LoteController extends Controller
      * @param  \App\Models\Lote  $lote
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Lote $lote)
+    public function update(Request $request, $id)
     {
-        //
+        $lote = Lote::findOrFail($id);
+        $lote->numero = $request->get('numero');
+        $lote->update();
+
+        return redirect()->route('lote.index');
     }
 
     /**
@@ -78,8 +92,14 @@ class LoteController extends Controller
      * @param  \App\Models\Lote  $lote
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Lote $lote)
+    public function destroy($id)
     {
-        //
+        $lote = Lote::findOrFail($id);
+        $lote->estado=0;
+        $lote->update();
+        
+
+
+        return redirect()->route('lote.index');
     }
 }

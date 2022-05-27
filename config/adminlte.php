@@ -265,6 +265,16 @@ return [
             'icon' => 'fas fa-map',
         ],
         [
+            'text' => 'Lotes',
+            'url'  => '/lote',
+            'icon' => '	fab fa-buromobelexperte',
+        ],
+        [
+            'text' => 'Construcciones',
+            'url'  => '/construccion',
+            'icon' => 'fas fa-toolbox',
+        ],
+        [
             'text' => 'profile',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',
