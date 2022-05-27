@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Casa;
+use App\Models\Lote;
 use Illuminate\Http\Request;
 
 class CasaController extends Controller
@@ -27,7 +28,8 @@ class CasaController extends Controller
      */
     public function create()
     {
-        return view('casa.create');
+        $lotes = Lote::all();
+        return view('casa.create',compact('lotes'));
     }
 
     /**

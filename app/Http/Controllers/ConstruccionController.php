@@ -14,7 +14,8 @@ class ConstruccionController extends Controller
      */
     public function index()
     {
-        //
+        $construcciones =Construccion::orderBy('idConstruccion','desc')->where('estado',1)->paginate(5);
+       return view('construccion.index', ['construcciones'=>$construcciones]);
     }
 
     /**
@@ -24,7 +25,7 @@ class ConstruccionController extends Controller
      */
     public function create()
     {
-        //
+        return view('construccion.create');
     }
 
     /**
@@ -35,7 +36,12 @@ class ConstruccionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $construccion = new Construccion;
+        $construccion->nombre = $request->get('nombre');
+        $construccion->estado = 1;
+        $construccion->save();
+
+        return redirect()->route('construccion.index');
     }
 
     /**
@@ -44,9 +50,11 @@ class ConstruccionController extends Controller
      * @param  \App\Models\Construccion  $construccion
      * @return \Illuminate\Http\Response
      */
-    public function show(Construccion $construccion)
+    public function show($id)
     {
-        //
+        $construccion = Construccion::findOrFail($id);
+
+        return view('construccion.show',['construccion'=>$construccion]);
     }
 
     /**
@@ -55,9 +63,11 @@ class ConstruccionController extends Controller
      * @param  \App\Models\Construccion  $construccion
      * @return \Illuminate\Http\Response
      */
-    public function edit(Construccion $construccion)
+    public function edit($id)
     {
-        //
+        $construccion = Construccion::findOrFail($id);
+
+        return view('construccion.edit',['construccion'=>$construccion]);
     }
 
     /**
@@ -67,9 +77,13 @@ class ConstruccionController extends Controller
      * @param  \App\Models\Construccion  $construccion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Construccion $construccion)
+    public function update(Request $request, $id)
     {
-        //
+        $construccion = Construccion::findOrFail($id);
+        $construccion->nombre = $request->get('nombre');
+        $construccion->update();
+
+        return redirect()->route('construccion.index');
     }
 
     /**
@@ -78,8 +92,14 @@ class ConstruccionController extends Controller
      * @param  \App\Models\Construccion  $construccion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Construccion $construccion)
+    public function destroy($id)
     {
-        //
+        $construccion = Construccion::findOrFail($id);
+        $construccion->estado=0;
+        $construccion->update();
+        
+
+
+        return redirect()->route('construccion.index');
     }
 }

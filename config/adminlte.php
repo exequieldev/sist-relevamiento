@@ -239,21 +239,13 @@ return [
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'buscar',
         ],
         [
             'text' => 'blog',
             'url'  => 'admin/blog',
             'can'  => 'manage-blog',
         ],
-        [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
         [
             'text' => 'Barrios',
             'url'  => '/barrio',
@@ -263,6 +255,21 @@ return [
             'text' => 'Manzanas',
             'url'  => '/manzana',
             'icon' => 'fas fa-map',
+        ],
+        [
+            'text' => 'Lotes',
+            'url'  => '/lote',
+            'icon' => '	fab fa-buromobelexperte',
+        ],
+        [
+            'text' => 'Casa',
+            'url'  => '/casa',
+            'icon' => 'fas fa-home',
+        ],
+        [
+            'text' => 'Construcciones',
+            'url'  => '/construccion',
+            'icon' => 'fas fa-toolbox',
         ],
         [
             'text' => 'profile',

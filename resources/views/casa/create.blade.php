@@ -22,19 +22,22 @@
           </div>
           <div class="form-group col-6">
             <label for="lote">Lote</label>
-            <input type="text" name="nombre" class="form-control" placeholder="Ingrese lote">
+            <select class="form-control">
+                <option>Seleccionar...</option>
+                @foreach ($lotes as $lote)
+                    <option value="{{$lote->idLote}}">{{$lote->numero}}</option>
+                @endforeach
+            </select>
           </div>
           <ul class="row list-unstyled">
                 <li class="col-3">
-                    <div>
+                    <div class="custom-control custom-checkbox">
                         <h2>Techos</h2> 
-                        <div class="form-group">
-                            <label for="nombreDetalle">Pared <input type="checkbox" name="nombreDetalle" class="form-control" placeholder="Ingrese lote"></label>
-                        </div>
+                        <input type="checkbox" class="custom-control-input" id="switchA" name="switch">
+                        <label class="custom-control-label" for="switchA">Custom checkbox</label>
                     </div>
                 </li>
           </ul>
-
           <div class="form-group">
               <button class="btn btn-primary" type="submit">Guardar</button>
               <button class="btn btn-danger" type="reset">Cancelar</button>

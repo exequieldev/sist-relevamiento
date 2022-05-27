@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barrio;
+use App\Models\Manzana;
+use App\Models\Lote;
 use App\Models\Relevamiento;
 use Illuminate\Http\Request;
 
@@ -14,7 +17,8 @@ class RelevamientoController extends Controller
      */
     public function index()
     {
-        //
+        $relevamientos=Relevamiento::orderBy('idRelevamiento','desc')->where('estado',1)->paginate(5);
+        return view('relevamiento.index', ['relevamientos'=>$relevamientos]);
     }
 
     /**
@@ -24,7 +28,10 @@ class RelevamientoController extends Controller
      */
     public function create()
     {
-        //
+        $barrios = Barrio::all();
+        $manzanas = Manzana::all();
+        $lotes = Lote::all();
+        return view('relevamiento.create',compact('barrios','manzanas','lotes'));
     }
 
     /**
@@ -35,7 +42,12 @@ class RelevamientoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $relevamiento = new Relevamiento;
+        $relevamiento->fechaDesde = $request->get('fechaDesde');
+        $relevamiento->estado = 1;
+        $relevamiento->save();
+
+        return redirect()->route('relevamiento.index');
     }
 
     /**
@@ -44,9 +56,11 @@ class RelevamientoController extends Controller
      * @param  \App\Models\Relevamiento  $relevamiento
      * @return \Illuminate\Http\Response
      */
-    public function show(Relevamiento $relevamiento)
+    public function show($id)
     {
-        //
+        $relevamiento = Relevamiento::findOrFail($id);
+
+        return view('relevamiento.show',['relevamiento'=>$relevamiento]);
     }
 
     /**
@@ -55,9 +69,11 @@ class RelevamientoController extends Controller
      * @param  \App\Models\Relevamiento  $relevamiento
      * @return \Illuminate\Http\Response
      */
-    public function edit(Relevamiento $relevamiento)
+    public function edit($id)
     {
-        //
+        $relevamiento = Relevamiento::findOrFail($id);
+
+        return view('relevamiento.edit',['relevamiento'=>$relevamiento]);
     }
 
     /**
@@ -67,9 +83,13 @@ class RelevamientoController extends Controller
      * @param  \App\Models\Relevamiento  $relevamiento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Relevamiento $relevamiento)
+    public function update(Request $request, $id)
     {
-        //
+        $relevamiento = Relevamiento::findOrFail($id);
+        $relevamiento->fechaDesde = $request->get('fechaDesde');
+        $barrio->update();
+
+        return redirect()->route('relevamiento.index');
     }
 
     /**
@@ -80,6 +100,10 @@ class RelevamientoController extends Controller
      */
     public function destroy(Relevamiento $relevamiento)
     {
-        //
+        $relevamiento = Relevamiento::findOrFail($id);
+        $relevamiento->estado=0;
+        $relevamiento->update();
+
+        return redirect()->route('relevamiento.index');
     }
 }
