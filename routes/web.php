@@ -28,51 +28,13 @@ use App\Http\Controllers\RelevamientoController;
 Route::get('/', function () {
     return view('welcome');
 });
-/*
-Route::get('inicio',[InicioController::class,'index']);
-Route::get('/barrio',[BarrioController::class,'index']);
-Route::get('/barrio/create',[BarrioController::class,'create']);
-*/
-//Route::put('barrio/{id}',[BarrioController::class,'update'])->name('barrio.update');
+
 
 
 Route::resource('/barrio',BarrioController::class);
 Route::resource('/manzana',ManzanaController::class);
-<<<<<<< HEAD
 Route::resource('/lote',LoteController::class);
 Route::resource('/barrio',BarrioController::class);
 Route::resource('/construccion',ConstruccionController::class);
 Route::resource('/detalleconstruccion',DetalleConstruccionController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-Route::resource('/barrio',BarrioController::class);
-=======
-
-
-Route::resource('/casa',CasaController::class);
-
-Route::resource('/lote',LoteController::class);
-
-Route::resource('/construccion',ConstruccionController::class);
-
 Route::resource('/relevamiento',RelevamientoController::class);
-
->>>>>>> c022640433b94584be4d6ebe488bba4a09bcc5e0
-

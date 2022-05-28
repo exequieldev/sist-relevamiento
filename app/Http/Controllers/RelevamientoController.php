@@ -6,7 +6,10 @@ use App\Models\Barrio;
 use App\Models\Manzana;
 use App\Models\Lote;
 use App\Models\Relevamiento;
+use App\Models\DetalleConstruccion;
+use App\Models\Construccion;
 use Illuminate\Http\Request;
+use DB;
 
 class RelevamientoController extends Controller
 {
@@ -31,7 +34,11 @@ class RelevamientoController extends Controller
         $barrios = Barrio::all();
         $manzanas = Manzana::all();
         $lotes = Lote::all();
-        return view('relevamiento.create',compact('barrios','manzanas','lotes'));
+        $detalleConstrucciones = DetalleConstruccion::all();
+
+        $construcciones = Construccion::all();
+        //dd($construcciones);
+        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones'));
     }
 
     /**

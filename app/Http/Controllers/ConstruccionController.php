@@ -25,6 +25,7 @@ class ConstruccionController extends Controller
      */
     public function create()
     {
+        
         return view('construccion.create');
     }
 
