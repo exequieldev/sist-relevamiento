@@ -5,8 +5,14 @@ use App\Http\Controllers\InicioController;
 use App\Http\Controllers\BarrioController;
 use App\Http\Controllers\ConstruccionController;
 use App\Http\Controllers\ManzanaController;
+
+use App\Http\Controllers\CasaController;
+
 use App\Http\Controllers\LoteController;
 use App\Http\Controllers\DetalleConstruccionController;
+
+use App\Http\Controllers\RelevamientoController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +38,7 @@ Route::get('/barrio/create',[BarrioController::class,'create']);
 
 Route::resource('/barrio',BarrioController::class);
 Route::resource('/manzana',ManzanaController::class);
+<<<<<<< HEAD
 Route::resource('/lote',LoteController::class);
 Route::resource('/barrio',BarrioController::class);
 Route::resource('/construccion',ConstruccionController::class);
@@ -56,4 +63,16 @@ Route::resource('/barrio',BarrioController::class);
 Route::resource('/barrio',BarrioController::class);
 Route::resource('/barrio',BarrioController::class);
 Route::resource('/barrio',BarrioController::class);
+=======
+
+
+Route::resource('/casa',CasaController::class);
+
+Route::resource('/lote',LoteController::class);
+
+Route::resource('/construccion',ConstruccionController::class);
+
+Route::resource('/relevamiento',RelevamientoController::class);
+
+>>>>>>> c022640433b94584be4d6ebe488bba4a09bcc5e0
 
