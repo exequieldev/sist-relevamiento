@@ -14,7 +14,7 @@ class DetalleConstruccionController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -24,7 +24,7 @@ class DetalleConstruccionController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -35,7 +35,13 @@ class DetalleConstruccionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $detalleconstruccion = new DetalleConstruccion;
+        $detalleconstruccion->nombre = $request->get('nombre');
+        $detalleconstruccion->estado = 1;
+        $detalleconstruccion->idConstruccion = $request->get('construccion');
+        $detalleconstruccion->save();
+
+        return redirect()->route('construccion.show', $detalleconstruccion->idConstruccion);
     }
 
     /**
@@ -55,9 +61,11 @@ class DetalleConstruccionController extends Controller
      * @param  \App\Models\DetalleConstruccion  $detalleConstruccion
      * @return \Illuminate\Http\Response
      */
-    public function edit(DetalleConstruccion $detalleConstruccion)
+    public function edit($id)
     {
-        //
+        $detalleconstruccion = DetalleConstruccion::findOrFail($id);
+
+        return view('detalleconstruccion.edit',['detalleconstruccion'=>$detalleconstruccion]);
     }
 
     /**
@@ -67,9 +75,13 @@ class DetalleConstruccionController extends Controller
      * @param  \App\Models\DetalleConstruccion  $detalleConstruccion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DetalleConstruccion $detalleConstruccion)
+    public function update(Request $request, $id)
     {
-        //
+        $detalleconstruccion = DetalleConstruccion::findOrFail($id);
+        $detalleconstruccion->nombre = $request->get('nombre');
+        $detalleconstruccion->update();
+
+        return redirect()->route('construccion.show', $detalleconstruccion->idConstruccion);
     }
 
     /**
@@ -78,8 +90,15 @@ class DetalleConstruccionController extends Controller
      * @param  \App\Models\DetalleConstruccion  $detalleConstruccion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DetalleConstruccion $detalleConstruccion)
+    public function destroy($id)
     {
-        //
+        $detalleconstruccion = DetalleConstruccion::findOrFail($id);
+        $detalleconstruccion->estado=0;
+        $detalleconstruccion->update();
+        
+
+
+        return redirect()->route('construccion.show', $detalleconstruccion->idConstruccion);
+
     }
 }

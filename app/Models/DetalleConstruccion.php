@@ -11,9 +11,9 @@ class DetalleConstruccion extends Model
 
     protected $table = "detalleconstrucciones";
 
-    protected $primaryKey = "idDetalleConstruccion";
+    protected $primaryKey = "iddetalleConstruccion";
 
-    protected $fillable = ['nombre','estado'];
+    protected $fillable = ['nombre','estado','idConstruccion'];
 
     public $timestamps=false;
 

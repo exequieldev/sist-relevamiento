@@ -27,8 +27,9 @@
                                 @method('delete')
                                 <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                               </form>
-                          </a>
-                      </div>
+                            </a>
+                            <a href="{{url('construccion/'.$construccion->idConstruccion)}}"><button class="btn btn-warning" ><i class="fas fa-plus"></i></button></a>
+                      </div>  
                 </td>
               </tr>
             @endforeach   

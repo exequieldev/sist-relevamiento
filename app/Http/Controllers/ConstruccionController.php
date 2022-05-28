@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Construccion;
 use Illuminate\Http\Request;
-
+use App\Models\DetalleConstruccion;
 class ConstruccionController extends Controller
 {
     /**
@@ -52,9 +52,14 @@ class ConstruccionController extends Controller
      */
     public function show($id)
     {
-        $construccion = Construccion::findOrFail($id);
+        $construccion = Construccion::findOrfail($id);
+        $detalleconstruccion =DetalleConstruccion::orderBy('idDetalleConstruccion','desc')
+        ->where('idConstruccion', $id)
+        ->where('estado',1)
+        ->paginate(5);
 
-        return view('construccion.show',['construccion'=>$construccion]);
+        return view('construccion.show',['detalleconstruccion'=>$detalleconstruccion, 'idConstruccion' => $id,
+        'nombre' => $construccion->nombre]);
     }
 
     /**

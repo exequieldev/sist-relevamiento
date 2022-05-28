@@ -6,6 +6,7 @@ use App\Http\Controllers\BarrioController;
 use App\Http\Controllers\ConstruccionController;
 use App\Http\Controllers\ManzanaController;
 use App\Http\Controllers\LoteController;
+use App\Http\Controllers\DetalleConstruccionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +35,7 @@ Route::resource('/manzana',ManzanaController::class);
 Route::resource('/lote',LoteController::class);
 Route::resource('/barrio',BarrioController::class);
 Route::resource('/construccion',ConstruccionController::class);
-Route::resource('/barrio',BarrioController::class);
+Route::resource('/detalleconstruccion',DetalleConstruccionController::class);
 Route::resource('/barrio',BarrioController::class);
 Route::resource('/barrio',BarrioController::class);
 Route::resource('/barrio',BarrioController::class);
