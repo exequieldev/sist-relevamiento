@@ -8,6 +8,8 @@ use App\Models\Lote;
 use App\Models\Relevamiento;
 use App\Models\DetalleConstruccion;
 use App\Models\Construccion;
+use App\Models\Habitacion;
+use App\Models\DetalleHabitacion;
 use Illuminate\Http\Request;
 use DB;
 
@@ -34,14 +36,16 @@ class RelevamientoController extends Controller
         $barrios = Barrio::all();
         $manzanas = Manzana::all();
         $lotes = Lote::all();
-        $detalleConstrucciones = DetalleConstruccion::where('estado', 1)->get();
+        $detalleConstrucciones = DetalleConstruccion::all();
+        $habitaciones = Habitacion::all();
+        $detalleHabitaciones = DetalleHabitacion::all();
 
         $construcciones = Construccion::where('estado', 1)
         ->whereIn('idConstruccion', DetalleConstruccion::select('idConstruccion'))          //Para controlar que no devuelva una construcción sin detalles de construccion registrados.
         ->get();
         
         //dd($construcciones);
-        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones'));
+        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones'));
     }
 
     /**
@@ -97,7 +101,7 @@ class RelevamientoController extends Controller
     {
         $relevamiento = Relevamiento::findOrFail($id);
         $relevamiento->fechaDesde = $request->get('fechaDesde');
-        $barrio->update();
+        $relevamiento->update();
 
         return redirect()->route('relevamiento.index');
     }
@@ -108,7 +112,7 @@ class RelevamientoController extends Controller
      * @param  \App\Models\Relevamiento  $relevamiento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Relevamiento $relevamiento)
+    public function destroy($id)
     {
         $relevamiento = Relevamiento::findOrFail($id);
         $relevamiento->estado=0;
