@@ -68,7 +68,7 @@
             @foreach ($detalleConstrucciones as $detalleConstruccion)
             
                     
-                    @if($construccion->idConstruccion == $detalleConstruccion->idConstruccion )
+                    @if($construccion->idConstruccion == $detalleConstruccion->idConstruccion)
                         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
                         <label class="pr-2" for="">{{$detalleConstruccion->nombre}}</label>
                             <input  type="checkbox" name="" id="">

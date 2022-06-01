@@ -34,9 +34,12 @@ class RelevamientoController extends Controller
         $barrios = Barrio::all();
         $manzanas = Manzana::all();
         $lotes = Lote::all();
-        $detalleConstrucciones = DetalleConstruccion::all();
+        $detalleConstrucciones = DetalleConstruccion::where('estado', 1)->get();
 
-        $construcciones = Construccion::all();
+        $construcciones = Construccion::where('estado', 1)
+        ->whereIn('idConstruccion', DetalleConstruccion::select('idConstruccion'))          //Para controlar que no devuelva una construcción sin detalles de construccion registrados.
+        ->get();
+        
         //dd($construcciones);
         return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones'));
     }
