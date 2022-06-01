@@ -249,7 +249,7 @@ return [
         [
             'text' => 'Relevemiento',
             'url'  => '/relevamiento',
-            'icon' => 'fas fa-home ',
+            'icon' => 'fas fa-clipboard-list fa-lg',
         ],
         [
             'text' => 'Barrios',
@@ -265,11 +265,6 @@ return [
             'text' => 'Lotes',
             'url'  => '/lote',
             'icon' => '	fab fa-buromobelexperte',
-        ],
-        [
-            'text' => 'Casa',
-            'url'  => '/casa',
-            'icon' => 'fas fa-home',
         ],
         [
             'text' => 'Construcciones',

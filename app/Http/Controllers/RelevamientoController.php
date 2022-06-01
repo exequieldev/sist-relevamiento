@@ -8,6 +8,8 @@ use App\Models\Lote;
 use App\Models\Relevamiento;
 use App\Models\DetalleConstruccion;
 use App\Models\Construccion;
+use App\Models\Habitacion;
+use App\Models\DetalleHabitacion;
 use Illuminate\Http\Request;
 use DB;
 
@@ -35,10 +37,11 @@ class RelevamientoController extends Controller
         $manzanas = Manzana::all();
         $lotes = Lote::all();
         $detalleConstrucciones = DetalleConstruccion::all();
-
         $construcciones = Construccion::all();
+        $habitaciones = Habitacion::all();
+        $detalleHabitaciones = DetalleHabitacion::all();
         //dd($construcciones);
-        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones'));
+        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones'));
     }
 
     /**
