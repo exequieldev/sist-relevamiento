@@ -143,7 +143,7 @@
 </div>
   
 <script>
-incrementador = 0;
+incrementador = 1;
 
 document.getElementById("btn_accordion").addEventListener("click", function(event){
   event.preventDefault();
@@ -155,7 +155,7 @@ function crearAcordeon(){
     acordion  = '<div class="card">';
     acordion =  acordion + '<div class="card-header" id="headingOne "' + incrementador + '">';
     acordion  =  acordion + '<h2 class="mb-0">';
-    acordion = acordion + '<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne' + incrementador + '" aria-expanded="true" aria-controls="collapseOne' + incrementador + '">Grupo Familiar N° </button> </h2>';
+    acordion = acordion + '<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne' + incrementador + '" aria-expanded="true" aria-controls="collapseOne' + incrementador + '">Grupo Familiar ' + incrementador + ' </button> </h2>';
     acordion = acordion + '</div>';
 
     //Contenido 
@@ -165,28 +165,28 @@ function crearAcordeon(){
     //Vinculo 
     acordion = acordion + '<div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">';
     acordion = acordion + '<div class="form-group">' + '<label for="casa">Vinculo</label>';
-    acordion = acordion + '<input type="text" name="casa" id="vinculo' + incrementador + '" class="form-control" placeholder="Ingrese vinculo">' + '</div>' + '</div>';
+    acordion = acordion + '<input type="text" id="vinculo' + incrementador + '" class="form-control" placeholder="Ingrese vinculo">' + '</div>' + '</div>';
 
     //Nombres
     acordion = acordion + '<div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">';
     acordion = acordion + '<div class="form-group">' + '<label for="nombres">Nombres</label>';
-    acordion = acordion + '<input type="text" name="nombres" id="nombres' + incrementador + '" class="form-control" placeholder="Ingrese nombres">' + '</div>' + '</div>';
+    acordion = acordion + '<input type="text" id="nombres' + incrementador + '" class="form-control" placeholder="Ingrese nombres">' + '</div>' + '</div>';
 
     //Apellidos
     acordion = acordion + '<div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">';
     acordion = acordion + '<div class="form-group">' + '<label for="apellidos">Apellidos</label>';
-    acordion = acordion + '<input type="text" name="apellidos" id="apellidos' + incrementador + '" class="form-control" placeholder="Ingrese apellidos">' + '</div>' + '</div>';
+    acordion = acordion + '<input type="text" id="apellidos' + incrementador + '" class="form-control" placeholder="Ingrese apellidos">' + '</div>' + '</div>';
 
     //Fecha Nacimiento
     acordion = acordion + '<div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">';
     acordion = acordion + '<div class="form-group">' + '<label for="fechaNac">Fecha Nacimiento</label>';
-    acordion = acordion + '<input type="text" name="fechaNac" id="fechaNac' + incrementador + '" class="form-control" placeholder="Ingrese Fecha Nacimiento">' + '</div>' + '</div>';
+    acordion = acordion + '<input type="text" id="fechaNac' + incrementador + '" class="form-control" placeholder="Ingrese Fecha Nacimiento">' + '</div>' + '</div>';
 
 
     //DNI
     acordion = acordion + '<div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">';
     acordion = acordion + '<div class="form-group">' + '<label for="dni">DNI</label>';
-    acordion = acordion + '<input type="text" name="dni" id="dni' + incrementador + '" class="form-control" placeholder="Ingrese DNI">' + '</div>' + '</div>' ;
+    acordion = acordion + '<input type="text" id="dni' + incrementador + '" class="form-control" placeholder="Ingrese DNI">' + '</div>' + '</div>' ;
 
     //Boton
     acordion = acordion + '<div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">';
@@ -220,8 +220,8 @@ function agregar(inc){
 
     if (vinculo != "" && nombres != "" && apellidos != "" && dni != "" && fechaNac != ""){
                 var fila = '<tr>';
-                fila = fila + '<td>' + "#" + '</td>';
-                fila = fila + '<td><input type="hidden" name="vinculos- ' + inc + ' []" value="' + vinculo + '">' + vinculo + '</td>' ;
+                fila = fila + '<td>' + '<input type="hidden" name="grupos[]" value="'+inc+'">'+'</td>';
+                fila = fila + '<td><input type="hidden" name="vinculos[]" value="' + vinculo + '">' + vinculo + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="nombres[]" value="' + nombres + '">' + nombres + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="apellidos[]" value="' + apellidos + '">' + apellidos + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="fechaNac[]" value="' + fechaNac + '">' + fechaNac + '</td>' ;

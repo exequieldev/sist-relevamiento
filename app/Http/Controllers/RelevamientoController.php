@@ -57,6 +57,23 @@ class RelevamientoController extends Controller
      */
     public function store(Request $request)
     {
+        $grupos = $request->get('grupos');
+        $vinculos = $request->get('vinculos');
+        $nombres = $request->get('nombres');
+        $apellidos = $request->get('apellidos');
+        $fechaNac = $request->get('fechaNac');
+        $dni = $request->get('dni');
+
+
+        for ($i=0; $i < count($vinculos); $i++) { 
+            echo($grupos[$i] . '<br>');
+            echo($vinculos[$i] . '<br>');
+            echo($nombres[$i] . '<br>');
+            echo($apellidos[$i] . '<br>');
+            echo($fechaNac[$i] . '<br>');
+            echo($dni[$i] . '<br>');
+        }
+
         $detallescons = $request->input('detallecons');
         $detalleshab = $request->input('detallehab');
 
@@ -85,6 +102,8 @@ class RelevamientoController extends Controller
 
             }
         }
+
+        
         
 
         $relevamiento = new Relevamiento;
