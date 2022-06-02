@@ -11,6 +11,7 @@ use App\Models\Construccion;
 use App\Models\Habitacion;
 use App\Models\DetalleHabitacion;
 use Illuminate\Http\Request;
+
 use DB;
 
 class RelevamientoController extends Controller
@@ -56,8 +57,43 @@ class RelevamientoController extends Controller
      */
     public function store(Request $request)
     {
+        $detallescons = $request->input('detallecons');
+        $detalleshab = $request->input('detallehab');
+
+        //dd($detalle);
+
+
+        //Foreach para Construcciones y detalles asociados.
+        foreach ($detallescons as $construccion => $valor) {
+            print("Construccion: ");
+            print_r($construccion);
+            foreach ($valor as $detallecons => $value) {
+                print("Detalle Construcción: ");
+                print($detallecons);
+                //insert($construccion, $detallecons)
+            }
+        }
+
+        //Foreach para Habitaciones y detalles asociados.
+        foreach ($detalleshab as $habitacion => $valor) {
+            print("Habitacion: ");
+            print_r($habitacion);
+            foreach ($valor as $detallehab => $value) {
+                print("Detalle Habitacion: ");
+                print($detallehab);
+                //insert($habitacion, $detallehab)
+
+            }
+        }
+        
+
         $relevamiento = new Relevamiento;
         $relevamiento->fechaDesde = $request->get('fechaDesde');
+        $relevamiento->fechaDesde = $request->get('');
+
+        
+        
+        
         $relevamiento->estado = 1;
         $relevamiento->save();
 
