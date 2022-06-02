@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Casa;
+use App\Models\Telefono;
+use App\Models\DetalleCasa;
 use App\Models\Barrio;
 use App\Models\Manzana;
 use App\Models\Lote;
@@ -10,6 +13,7 @@ use App\Models\DetalleConstruccion;
 use App\Models\Construccion;
 use App\Models\Habitacion;
 use App\Models\DetalleHabitacion;
+
 use Illuminate\Http\Request;
 
 use DB;
@@ -57,11 +61,26 @@ class RelevamientoController extends Controller
      */
     public function store(Request $request)
     {
+        
+        $casa = new Casa;
+        $casa->idlote = $request->input('lote');
+        $casa->nombre = $request->input('lote');
+        $casa->iddetalleConstruccion = 18;
+        $casa->estado = 1;
+        $casa->save();
+
+        $telefono = new Telefono;
+        $telefono->tipoTelefono = 'celular';
+        $telefono->numero = $request->input('telefono');
+        $telefono->idCasa = $casa->idCasa;
+        $telefono->save();
+
+
+        dd($request);
         $detallescons = $request->input('detallecons');
         $detalleshab = $request->input('detallehab');
 
         //dd($detalle);
-
 
         //Foreach para Construcciones y detalles asociados.
         foreach ($detallescons as $construccion => $valor) {
@@ -74,6 +93,14 @@ class RelevamientoController extends Controller
             }
         }
 
+        $detalleCasa = new DetalleCasa;
+        $detalleCasa->idCasa = $casa->idCasa;
+        $detalleCasa->tipoVivienda = $request->input('tipoVivienda');
+        $detalleCasa->hacinamiento = $request->input('hacinamiento');
+        $detalleCasa->numeroHabitacion = $request->input('numeroHabitacion');
+        $detalleCasa->save();
+
+
         //Foreach para Habitaciones y detalles asociados.
         foreach ($detalleshab as $habitacion => $valor) {
             print("Habitacion: ");
@@ -81,11 +108,11 @@ class RelevamientoController extends Controller
             foreach ($valor as $detallehab => $value) {
                 print("Detalle Habitacion: ");
                 print($detallehab);
+
                 //insert($habitacion, $detallehab)
 
             }
         }
-        
 
         $relevamiento = new Relevamiento;
         $relevamiento->fechaDesde = $request->get('fechaDesde');

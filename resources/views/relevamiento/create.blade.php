@@ -87,15 +87,15 @@
                         <h5>Tipo Vivienda</h5>
                         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
                         <label class="pr-2" for="">Compartida</label>
-                            <input  type="checkbox" name="" id="">
+                            <input  type="checkbox" name="tipoVivienda" id="">
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
                         <label class="pr-2" for="">N° Habitacion</label>
-                            <input style="width: 50px" type="number" name="" id="">
+                            <input style="width: 50px" type="number" name="numeroHabitacion" id="">
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
                         <label class="pr-2" for="">Hacinamiento</label>
-                            <input  type="checkbox" name="" id="">
+                            <input  type="checkbox" name="hacinamiento" id="">
                         </li>
                     </ul>
                 </div>

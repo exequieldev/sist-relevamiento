@@ -13,7 +13,7 @@ class DetalleCasa extends Model
 
     protected $primaryKey = "idDetalleCasa";
 
-    protected $fillable = ['tipoVivienda','hacinamiento'];
+    protected $fillable = ['idCasa','tipoVivienda','hacinamiento','numeroHabitacion'];
 
     public $timestamps=false;
 
