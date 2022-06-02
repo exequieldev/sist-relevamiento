@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Habitacion;
+use App\Models\DetalleHabitacion;
 use Illuminate\Http\Request;
 
 class HabitacionController extends Controller
@@ -14,7 +15,9 @@ class HabitacionController extends Controller
      */
     public function index()
     {
-        //
+        $habitaciones=Habitacion::orderBy('idHabitacion','desc')->where('estado',1)->paginate(5);
+        
+        return view('habitacion.index', ['habitaciones'=>$habitaciones]);
     }
 
     /**
@@ -24,7 +27,8 @@ class HabitacionController extends Controller
      */
     public function create()
     {
-        //
+        
+        return view('habitacion.create');
     }
 
     /**
@@ -35,7 +39,12 @@ class HabitacionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $habitacion = new Habitacion;
+        $habitacion->nombre = $request->get('nombre');
+        $habitacion->estado = 1;
+        $habitacion->save();
+
+        return redirect()->route('habitacion.index');
     }
 
     /**
@@ -44,9 +53,16 @@ class HabitacionController extends Controller
      * @param  \App\Models\Habitacion  $habitacion
      * @return \Illuminate\Http\Response
      */
-    public function show(Habitacion $habitacion)
+    public function show($id)
     {
-        //
+        $habitacion = Habitacion::findOrfail($id);
+        $detalleHabitacion = DetalleHabitacion::orderBy('idDetalleHabitacion','desc')
+        ->where('idHabitacion', $id)
+        ->where('estado',1)
+        ->paginate(5);
+
+        return view('habitacion.show',['detalleHabitacion'=>$detalleHabitacion, 'idHabitacion' => $id,
+        'nombre' => $habitacion->nombre]);
     }
 
     /**
@@ -55,9 +71,11 @@ class HabitacionController extends Controller
      * @param  \App\Models\Habitacion  $habitacion
      * @return \Illuminate\Http\Response
      */
-    public function edit(Habitacion $habitacion)
+    public function edit($id)
     {
-        //
+        $habitacion = Habitacion::findOrFail($id);
+
+        return view('habitacion.edit',['habitacion'=>$habitacion]);
     }
 
     /**
@@ -67,9 +85,13 @@ class HabitacionController extends Controller
      * @param  \App\Models\Habitacion  $habitacion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Habitacion $habitacion)
+    public function update(Request $request, $id)
     {
-        //
+        $habitacion = Habitacion::findOrFail($id);
+        $habitacion->nombre = $request->get('nombre');
+        $habitacion->update();
+
+        return redirect()->route('habitacion.index');
     }
 
     /**
@@ -78,8 +100,14 @@ class HabitacionController extends Controller
      * @param  \App\Models\Habitacion  $habitacion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Habitacion $habitacion)
+    public function destroy($id)
     {
-        //
+        $habitacion = Habitacion::findOrFail($id);
+        $habitacion->estado=0;
+        $habitacion->update();
+        
+
+
+        return redirect()->route('habitacion.index');
     }
 }

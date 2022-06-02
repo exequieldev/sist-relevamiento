@@ -13,7 +13,7 @@ class Telefono extends Model
 
     protected $primaryKey = "idTelefono";
 
-    protected $fillable = ['tipoTelefono','numero'];
+    protected $fillable = ['idCasa','numero'];
 
     public $timestamps=false;
 

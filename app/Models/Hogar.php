@@ -13,7 +13,7 @@ class Hogar extends Model
 
     protected $primaryKey = "idhogar";
 
-  
+    protected $fillable = ['idCasa'];
 
     public $timestamps=false;
 

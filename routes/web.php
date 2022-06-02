@@ -12,6 +12,8 @@ use App\Http\Controllers\LoteController;
 use App\Http\Controllers\DetalleConstruccionController;
 
 use App\Http\Controllers\RelevamientoController;
+use App\Http\Controllers\HabitacionController;
+use App\Http\Controllers\DetalleHabitacionController;
 
 
 /*
@@ -38,3 +40,5 @@ Route::resource('/barrio',BarrioController::class);
 Route::resource('/construccion',ConstruccionController::class);
 Route::resource('/detalleconstruccion',DetalleConstruccionController::class);
 Route::resource('/relevamiento',RelevamientoController::class);
+Route::resource('/habitacion',HabitacionController::class);
+Route::resource('/detallehabitacion',DetalleHabitacionController::class);

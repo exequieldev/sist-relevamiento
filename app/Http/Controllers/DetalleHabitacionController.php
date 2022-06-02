@@ -35,7 +35,13 @@ class DetalleHabitacionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $detallehabitacion = new DetalleHabitacion;
+        $detallehabitacion->nombre = $request->get('nombre');
+        $detallehabitacion->estado = 1;
+        $detallehabitacion->idHabitacion = $request->get('habitacion');
+        $detallehabitacion->save();
+
+        return redirect()->route('habitacion.show', $detallehabitacion->idHabitacion);
     }
 
     /**
@@ -55,9 +61,11 @@ class DetalleHabitacionController extends Controller
      * @param  \App\Models\DetalleHabitacion  $detalleHabitacion
      * @return \Illuminate\Http\Response
      */
-    public function edit(DetalleHabitacion $detalleHabitacion)
+    public function edit($id)
     {
-        //
+        $detallehabitacion = DetalleHabitacion::findOrFail($id);
+
+        return view('detallehabitacion.edit',['detallehabitacion'=>$detallehabitacion]);
     }
 
     /**
@@ -67,9 +75,13 @@ class DetalleHabitacionController extends Controller
      * @param  \App\Models\DetalleHabitacion  $detalleHabitacion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DetalleHabitacion $detalleHabitacion)
+    public function update(Request $request, $id)
     {
-        //
+        $detalleHabitacion = DetalleHabitacion::findOrFail($id);
+        $detallehabitacion->nombre = $request->get('nombre');
+        $detallehabitacion->update();
+
+        return redirect()->route('habitacion.show', $detallehabitacion->idhabitacion);
     }
 
     /**
@@ -78,8 +90,14 @@ class DetalleHabitacionController extends Controller
      * @param  \App\Models\DetalleHabitacion  $detalleHabitacion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DetalleHabitacion $detalleHabitacion)
+    public function destroy($id)
     {
-        //
+        $detallehabitacion = DetalleHabitacion::findOrFail($id);
+        $detallehabitacion->estado=0;
+        $detallehabitacion->update();
+        
+
+
+        return redirect()->route('habitacion.show', $detallehabitacion->idhabitacion);
     }
 }

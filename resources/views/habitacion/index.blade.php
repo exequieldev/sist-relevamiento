@@ -3,7 +3,7 @@
 @section('content')
   <!--Encabezado-->
   <div class="row">
-    <h1>Relevamientos <a href={{url('relevamiento/create')}}><button class="btn btn-success">Nuevo</button></a></h1>
+    <h1>Construcciones <a href={{url('habitacion/create')}}><button class="btn btn-success">Nuevo</button></a></h1>
   </div>
   <div class="row">
     <div class="col-lg-12 col-md-8 col-sm-8 col-sx-8 ">
@@ -11,30 +11,31 @@
         <table class="table table-streped table-bordered table-condensed table-hover">
             <thead>
                 <th>Id</th>
-                <th>Fecha</th>
+                <th>Nombre</th>
                 <th>Opciones</th>
             </thead>
-            @foreach ($relevamientos as $relevamiento)
+            @foreach ($habitaciones as $habitacion)
               <tr>
-                <td>{{$relevamiento->idRelevamiento}}</td>
-                <td>{{$relevamiento->fechaDesde}}</td>
+                <td>{{$habitacion->idHabitacion}}</td>
+                <td>{{$habitacion->nombre}}</td>
                 <td>
                       <div class="btn-toolbar">
-                          <a href="{{url('relevamiento/'.$relevamiento->idRelevamiento.'/edit')}}"><button class="btn btn-info" ><i class="fas fa-edit"></i></button></a>
+                          <a href="{{url('habitacion/'.$habitacion->idHabitacion.'/edit')}}"><button class="btn btn-info" ><i class="fas fa-edit"></i></button></a>
                           <a href="#">
-                              <form action="{{route('relevamiento.destroy',$relevamiento->idRelevamiento)}}" method="POST">
+                              <form action="{{route('habitacion.destroy',$habitacion->idHabitacion)}}" method="POST">
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                               </form>
-                          </a>
-                      </div>
+                            </a>
+                            <a href="{{url('habitacion/'.$habitacion->idHabitacion)}}"><button class="btn btn-warning" ><i class="fas fa-plus"></i></button></a>
+                      </div>  
                 </td>
               </tr>
             @endforeach   
         </table>
     </div>
-    {{-- {{$relevamientos->render()}} --}}
+    {{$habitaciones->render()}}
     </div>
   </div>
 

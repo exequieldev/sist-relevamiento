@@ -13,7 +13,7 @@ class Casa extends Model
 
     protected $primaryKey = "idCasa";
 
-    protected $fillable = ['idlote','nombre','iddetalleConstruccion','estado'];
+    protected $fillable = ['idlote','nombre','estado'];
 
     public $timestamps=false;
 

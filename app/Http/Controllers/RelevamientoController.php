@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Casa;
 use App\Models\Telefono;
 use App\Models\DetalleCasa;
+use App\Models\CasaDetalleConstruccion;
+use App\Models\CasaHabitacion;
 use App\Models\Barrio;
 use App\Models\Manzana;
 use App\Models\Lote;
+use App\Models\Hogar;
+use App\Models\Persona;
 use App\Models\Relevamiento;
 use App\Models\DetalleConstruccion;
 use App\Models\Construccion;
@@ -27,7 +31,8 @@ class RelevamientoController extends Controller
      */
     public function index()
     {
-        $relevamientos=Relevamiento::orderBy('idRelevamiento','desc')->where('estado',1)->paginate(5);
+        $relevamientos=Relevamiento::orderBy('idRelevamiento','desc')->where('estado',1)->get();
+        
         return view('relevamiento.index', ['relevamientos'=>$relevamientos]);
     }
 
@@ -61,22 +66,44 @@ class RelevamientoController extends Controller
      */
     public function store(Request $request)
     {
+
         
         $casa = new Casa;
         $casa->idlote = $request->input('lote');
-        $casa->nombre = $request->input('lote');
-        $casa->iddetalleConstruccion = 18;
+        $casa->nombre = $request->input('casa');
         $casa->estado = 1;
         $casa->save();
 
         $telefono = new Telefono;
-        $telefono->tipoTelefono = 'celular';
         $telefono->numero = $request->input('telefono');
         $telefono->idCasa = $casa->idCasa;
         $telefono->save();
 
 
-        dd($request);
+        
+
+        $grupos = $request->get('grupos');
+        $vinculos = $request->get('vinculos');
+        $nombres = $request->get('nombres');
+        $apellidos = $request->get('apellidos');
+        $fechaNac = $request->get('fechaNac');
+        $dni = $request->get('dni');
+
+        
+        
+        
+        // for ($i=0; $i < count($vinculos); $i++) {
+        //     $persona = new Persona;
+        //     $persona->vinculo = $vinculos[$i];
+        //     $persona->nombres = $nombres[$i];
+        //     $persona->apellidos = $apellidos[$i];
+        //     $persona->fechaNacimiento = $fechaNac[$i];
+        //     $persona->dni = $dni[$i];
+        //     $persona->ocupacion = 'maestro';
+        //     $persona->hogares_idhogar = $grupo->idHogar;
+
+        // }
+
         $detallescons = $request->input('detallecons');
         $detalleshab = $request->input('detallehab');
 
@@ -84,45 +111,75 @@ class RelevamientoController extends Controller
 
         //Foreach para Construcciones y detalles asociados.
         foreach ($detallescons as $construccion => $valor) {
-            print("Construccion: ");
-            print_r($construccion);
+            
             foreach ($valor as $detallecons => $value) {
-                print("Detalle Construcción: ");
-                print($detallecons);
+                
                 //insert($construccion, $detallecons)
+                $casadetalleconstruccion = new CasaDetalleConstruccion;
+                $casadetalleconstruccion->idCasa =  $casa->idCasa;
+                $casadetalleconstruccion->iddetalleConstruccion = $detallecons;
+                $casadetalleconstruccion->save();
             }
         }
 
         $detalleCasa = new DetalleCasa;
         $detalleCasa->idCasa = $casa->idCasa;
-        $detalleCasa->tipoVivienda = $request->input('tipoVivienda');
-        $detalleCasa->hacinamiento = $request->input('hacinamiento');
+        $detalleCasa->tipoVivienda = 1;
+        $detalleCasa->hacinamiento = 1;
         $detalleCasa->numeroHabitacion = $request->input('numeroHabitacion');
         $detalleCasa->save();
 
 
         //Foreach para Habitaciones y detalles asociados.
-        foreach ($detalleshab as $habitacion => $valor) {
-            print("Habitacion: ");
-            print_r($habitacion);
-            foreach ($valor as $detallehab => $value) {
-                print("Detalle Habitacion: ");
-                print($detallehab);
+        // foreach ($detalleshab as $habitacion => $valor) {
+        //     print("Habitacion: ");
+        //     print_r($habitacion);
+        //     foreach ($valor as $detallehab => $value) {
+        //         print("Detalle Habitacion: ");
+        //         print($detallehab);
+        //         $casaHabitacion = new CasaHabitacion;
+        //         $casaHabitacion->idCasa = $casa->idCasa;
+        //         $casaHabitacion->idHabitacion = $detallehab;
+        //         $casaHabitacion->save();
+        //         //insert($habitacion, $detallehab)
 
-                //insert($habitacion, $detallehab)
+        //     }
+        // }
+        $indice = 1;
+        for ($j=0; $j < count($vinculos); $j++){
+            
 
+            if ($grupos[$j]==$indice){
+                $grupo = new Hogar;
+                $grupo->idCasa = $casa->idCasa;
+                $grupo->save();
+                
+                for ($i=0; $i < count($vinculos); $i++) {
+                    $persona = new Persona;
+                    $persona->vinculo = $vinculos[$i];
+                    $persona->nombres = $nombres[$i];
+                    $persona->apellidos = $apellidos[$i];
+                    $persona->fechaNacimiento = '2022-06-08';
+                    $persona->dni = $dni[$i];
+                    $persona->ocupacion = 'maestro';
+                    $persona->hogares_idhogar = $grupo->idhogar;
+                    $persona->save();
+                }
+                
             }
+            $indice++;
+                $relevamiento = new Relevamiento;
+                $relevamiento->fechaDesde = '2022-06-08';
+                $relevamiento->idhogar = $grupo->idhogar;
+                $relevamiento->estado = 1;
+                $relevamiento->save();
         }
 
-        $relevamiento = new Relevamiento;
-        $relevamiento->fechaDesde = $request->get('fechaDesde');
-        $relevamiento->fechaDesde = $request->get('');
-
         
         
         
-        $relevamiento->estado = 1;
-        $relevamiento->save();
+        dd($relevamiento);
+        
 
         return redirect()->route('relevamiento.index');
     }
