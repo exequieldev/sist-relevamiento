@@ -8,8 +8,10 @@ use App\Models\DetalleCasa;
 use App\Models\CasaDetalleConstruccion;
 use App\Models\CasaHabitacion;
 use App\Models\Barrio;
+use App\Models\BarriosManzana;
 use App\Models\Manzana;
 use App\Models\Lote;
+use App\Models\ManzanaLote;
 use App\Models\Hogar;
 use App\Models\Persona;
 use App\Models\Relevamiento;
@@ -67,13 +69,100 @@ class RelevamientoController extends Controller
     public function store(Request $request)
     {
 
-        
-        $casa = new Casa;
-        $casa->idlote = $request->input('lote');
-        $casa->nombre = $request->input('casa');
-        $casa->estado = 1;
-        $casa->save();
+       
+        if ($request->manzana == null && $request->numero == null && $request->lote == null) {
 
+            $buscarCasa = BarriosManzana::join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')
+            ->join('manzanas','barrio_manzanas.idManzan', '=', 'manzanas.idManzana')
+            ->join('manzana_lotes','manzana_lotes.Manzanas_idManzana','=','manzanas.idManzana')
+            ->join('lotes','lotes.idLote','=', 'manzana_lotes.idLote')
+            ->join('casas','lotes.idLote' ,'=' ,'casas.idLote')
+            ->where('barrios.nombre','=','Andresito')
+            ->where('casas.nombre','=',$request->casa)
+            ->select('casas.nombre as nombre','lotes.idLote as Lote')
+            ->first();
+            
+            if(!empty($buscarCasa)){
+                $casa = new Casa;
+                $casa->idLote = $buscarCasa->Lote;
+                $casa->nombre = $request->casa;
+                //$casa->division
+                $casa->estado = 1;
+                $casa->save();
+            }else{
+                $manzana=Manzana::orderBy('idManzana','desc')
+                ->where('estado',1)
+                ->orwhere('descripcion','=','NNN')
+                //->orwhere('numero','=','000')
+                ->get();
+
+                $lote = new Lote;
+                $lote->numero = 00;
+                $lote->estado = 1;
+                $lote->save();
+
+                $manzanaLote = new ManzanaLote;
+                $manzanaLote->idManzana = $manzana->idManzana;
+                $manzanaLote->idLote = $lote->idLote;
+                $manzanaLote->save();
+
+                $casa = new Casa;
+                $casa->idLote = $lote->idLote;
+                $casa->nombre = $request->casa;
+                //$casa->division
+                $casa->estado = 1;
+                $casa->save();
+            }
+
+        }else{
+            $buscarCasa = BarriosManzana::join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')
+            ->join('manzanas','barrio_manzanas.idManzan', '=', 'manzanas.idManzana')
+            ->join('manzana_lotes','manzana_lotes.Manzanas_idManzana','=','manzanas.idManzana')
+            ->join('lotes','lotes.idLote','=', 'manzana_lotes.idLote')
+            ->join('casas','lotes.idLote' ,'=' ,'casas.idLote')
+            ->where('barrios.nombre','=','Andresito')
+            ->where('casas.nombre','=',$request->casa)
+            ->select('casas.nombre as nombre','lotes.idLote as Lote')
+            ->first();
+            
+            if(!empty($buscarCasa)){
+                $casa = new Casa;
+                $casa->idLote = $buscarCasa->Lote;
+                $casa->nombre = $request->casa;
+                //$casa->division
+                $casa->estado = 1;
+                $casa->save();
+            }else{
+                $manzana = new Manzana;
+                $manzana->descripcion = $request->numero;
+                $manzana->estado = 1;
+                $manzana->save();
+
+                $lote = new Lote;
+                $lote->numero = $request->numero;
+                $lote->estado = 1;
+                $lote->save();
+
+                $barriosManzana = new BarriosManzana;
+                $barriosManzana->idBarrio = 1;
+                $barriosManzana->idManzan = $manzana->idManzana;
+                $barriosManzana->save();
+
+                $manzanaLote = new ManzanaLote;
+                $manzanaLote->idManzana = $manzana->idManzana;
+                $manzanaLote->idLote = $lote->idLote;
+
+                $casa = new Casa;
+                $casa->idLote = $lote->idLote;
+                $casa->nombre = $request->casa;
+                //$casa->division
+                $casa->estado = 1;
+                $casa->save();
+            }
+            dd('Teminado');
+        }
+        
+        
         $telefono = new Telefono;
         $telefono->numero = $request->input('telefono');
         $telefono->idCasa = $casa->idCasa;

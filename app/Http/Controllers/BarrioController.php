@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Manzana;
+use App\Models\BarrioManzana;
 use App\Models\Barrio;
 use DB;
 
@@ -41,7 +43,8 @@ class BarrioController extends Controller
      */
     public function store(Request $request)
     {
-
+        
+        
         $barrio = new Barrio;
         $barrio->nombre = $request->get('nombre');
         $barrio->estado = 1;

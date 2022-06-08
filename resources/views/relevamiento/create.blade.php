@@ -17,7 +17,7 @@
     <form action={{url('/relevamiento')}} method="POST" autocomplete="off">
           @csrf
           <div class="row">
-            <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
+        {{-- <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
                 <label for="barrio">Barrio</label>
                 <select name="barrio" class="form-control">
                     <option>Seleccionar...</option>
@@ -25,31 +25,41 @@
                         <option value="{{$barrio->idBarrio}}">{{$barrio->nombre}}</option>
                     @endforeach
                 </select>
-              </div>
+              </div> --}}
 
-              <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
+              <div class="form-group col-lg-1 col-md-1 col-sd-1 col-xs-1 mb-0">
                 <label for="manzana">Manzana</label>
-                <select name="manzana" class="form-control">
+                <input type="text" name="manzana" class="form-control" placeholder="Ingrese Manzana">
+                
+                {{-- <select name="manzana" class="form-control">
                     <option>Seleccionar...</option>
                     @foreach ($manzanas as $manzana)
                         <option value="{{$manzana->idManzana}}">{{$manzana->descripcion}}</option>
                     @endforeach
-                </select>
+                </select> --}}
               </div>
+              <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
+                <label for="numero">Numero</label>
+                <input type="text" name="numero" class="form-control" placeholder="Ingrese Numero">
+               
+              </div>
+
 
               <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
                 <label for="lote">Lote</label>
-                <select name="lote" class="form-control">
+                <input type="text" name="lote" class="form-control" placeholder="Ingrese lote">
+                {{-- <select name="lote" class="form-control">
                     <option>Seleccionar...</option>
                     @foreach ($lotes as $lote)
                         <option value="{{$lote->idLote}}">{{$lote->numero}}</option>
                     @endforeach
-                </select>
-              </div>
+                </select> --}}
+              </div> 
                 <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
                     <div class="form-group">
                         <label for="casa">Casa N°</label>
                         <input type="text" name="casa" class="form-control" placeholder="Ingrese numero de la casa">
+                        
                     </div>
                 </div>
                 <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">

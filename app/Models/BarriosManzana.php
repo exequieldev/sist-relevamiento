@@ -9,10 +9,11 @@ class BarriosManzana extends Model
 {
     use HasFactory;
 
-    protected $table = "barrios_manzanas";
+    protected $table = "barrio_manzanas";
 
     protected $primaryKey = "idBarrio_Manzanas";
 
+    protected $fillable = ['idBarrio','idManzan'];
 
     public $timestamps=false;
 
