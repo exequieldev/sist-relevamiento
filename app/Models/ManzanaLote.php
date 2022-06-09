@@ -13,7 +13,7 @@ class ManzanaLote extends Model
 
     protected $primaryKey = "idManzana_Lote";
 
-    protected $fillable = ['idManzana','idLote'];
+    protected $fillable = ['Manzanas_idManzana','idLote'];
 
     public $timestamps=false;
 

@@ -10,14 +10,20 @@
       <div class="table-responsive">
         <table class="table table-streped table-bordered table-condensed table-hover">
             <thead>
-                <th>Id</th>
                 <th>Fecha</th>
+                <th>Barrios</th>
+                <th>Manzanas</th>
+                <th>Lotes</th>
+                <th>Casa</th>
                 <th>Opciones</th>
             </thead>
             @foreach ($relevamientos as $relevamiento)
               <tr>
-                <td>{{$relevamiento->idRelevamiento}}</td>
                 <td>{{$relevamiento->fechaDesde}}</td>
+                <td>{{$relevamiento->nombre}}</td>
+                <td>{{$relevamiento->descripcion}}</td>
+                <td>{{$relevamiento->lote}}</td>
+                <td>{{$relevamiento->casa}}</td>
                 <td>
                       <div class="btn-toolbar">
                           <a href="{{url('relevamiento/'.$relevamiento->idRelevamiento.'/edit')}}"><button class="btn btn-info" ><i class="fas fa-edit"></i></button></a>
@@ -28,6 +34,7 @@
                                 <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                               </form>
                           </a>
+                          <a href=""><button class="btn btn-warning" ><i class="fas fa-plus"></i></button></a>
                       </div>
                 </td>
               </tr>
