@@ -44,9 +44,9 @@ class RelevamientoController extends Controller
             ->join('relevamientos','relevamientos.idHogar','=','hogares.idHogar')
             ->where('relevamientos.estado',1)
             ->select('relevamientos.idRelevamiento as idRelevamiento','relevamientos.fechaDesde as fechaDesde','barrios.nombre as nombre','manzanas.descripcion as descripcion','lotes.numero as lote','casas.nombre as casa')
-            ->get()
-            ->groupBy('casa');
-
+            ->get();
+            
+       
         //dd($relevamientos);
         //$relevamientos=Relevamiento::orderBy('idRelevamiento','desc')->where('estado',1)->get();
         
@@ -89,7 +89,6 @@ class RelevamientoController extends Controller
     public function store(Request $request)
     {
 
-       
         if ($request->manzana == null && $request->numero == null && $request->lote == null) {
 
             $buscarCasa = BarriosManzana::join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')
@@ -112,12 +111,12 @@ class RelevamientoController extends Controller
             }else{
                 $manzana=Manzana::orderBy('idManzana','desc')          
                 ->where('estado',1)
-                ->where('descripcion','=','NNN')
+                ->where('descripcion','=','Sin Manzana')
                 //->orwhere('numero','=','000')
                 ->first();
 
                 $lote = new Lote;
-                $lote->numero = 00;
+                $lote->numero = 'Sin Lote';
                 $lote->estado = 1;
                 $lote->save();
 
@@ -185,7 +184,6 @@ class RelevamientoController extends Controller
         
         
         $telefono = new Telefono;
-        $telefono->tipoTelefono = "celular";
         $telefono->numero = $request->input('telefono');
         $telefono->idCasa = $casa->idCasa;
         $telefono->save();

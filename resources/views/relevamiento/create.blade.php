@@ -27,34 +27,7 @@
                 </select>
               </div> --}}
 
-              <div class="form-group col-lg-1 col-md-1 col-sd-1 col-xs-1 mb-0">
-                <label for="manzana">Manzana</label>
-                <input type="text" name="manzana" class="form-control" placeholder="Ingrese Manzana">
-                
-                {{-- <select name="manzana" class="form-control">
-                    <option>Seleccionar...</option>
-                    @foreach ($manzanas as $manzana)
-                        <option value="{{$manzana->idManzana}}">{{$manzana->descripcion}}</option>
-                    @endforeach
-                </select> --}}
-              </div>
-              <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
-                <label for="numero">Numero</label>
-                <input type="text" name="numero" class="form-control" placeholder="Ingrese Numero">
                
-              </div>
-
-
-              <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
-                <label for="lote">Lote</label>
-                <input type="text" name="lote" class="form-control" placeholder="Ingrese lote">
-                {{-- <select name="lote" class="form-control">
-                    <option>Seleccionar...</option>
-                    @foreach ($lotes as $lote)
-                        <option value="{{$lote->idLote}}">{{$lote->numero}}</option>
-                    @endforeach
-                </select> --}}
-              </div> 
                 <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
                     <div class="form-group">
                         <label for="casa">Casa N°</label>
@@ -65,7 +38,7 @@
                 <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
                     <div class="form-group">
                         <label for="numeroTelefono">Numero Telefono</label>
-                        <input type="number" name="telefono" class="form-control" placeholder="Ingrese el numero de telefono">
+                        <input type="text" name="telefono" class="form-control" placeholder="Ingrese el numero de telefono">
                     </div>
                 </div>
           </div>
