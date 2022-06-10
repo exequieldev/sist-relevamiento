@@ -3,7 +3,7 @@
 @section('content')
   <!--Encabezado-->
   <div class="row">
-    <h1>Construcciones <a href={{url('habitacion/create')}}><button class="btn btn-success">Nuevo</button></a></h1>
+    <h1>Habitaciones <a href={{url('habitacion/create')}}><button class="btn btn-success">Nuevo</button></a></h1>
   </div>
   <div class="row">
     <div class="col-lg-12 col-md-8 col-sm-8 col-sx-8 ">
