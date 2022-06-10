@@ -34,7 +34,7 @@ class RelevamientoController extends Controller
     public function index()
     {
 
-        $relevamientos = BarriosManzana::join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')
+        $relevamientos = BarriosManzana::orderBy('idBarrio_Manzanas','desc')->join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')
             ->join('manzanas','barrio_manzanas.idManzan', '=', 'manzanas.idManzana')
             ->join('manzana_lotes','manzana_lotes.Manzanas_idManzana','=','manzanas.idManzana')
             ->join('lotes','lotes.idLote','=', 'manzana_lotes.idLote')
