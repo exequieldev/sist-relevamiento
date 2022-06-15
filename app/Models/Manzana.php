@@ -13,7 +13,7 @@ class Manzana extends Model
 
     protected $primaryKey = "idManzana";
 
-    protected $fillable = ['descripcion'];
+    protected $fillable = ['numero','division','estado'];
 
     public $timestamps=false;
 

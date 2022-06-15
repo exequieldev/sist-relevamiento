@@ -13,7 +13,7 @@ class BarriosManzana extends Model
 
     protected $primaryKey = "idBarrio_Manzanas";
 
-    protected $fillable = ['idBarrio','idManzan'];
+    protected $fillable = ['idBarrio','idManzana'];
 
     public $timestamps=false;
 

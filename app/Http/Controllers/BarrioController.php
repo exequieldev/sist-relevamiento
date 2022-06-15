@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Manzana;
-use App\Models\BarrioManzana;
+use App\Models\BarriosManzana;
 use App\Models\Barrio;
 use DB;
 
@@ -49,6 +49,18 @@ class BarrioController extends Controller
         $barrio->nombre = $request->get('nombre');
         $barrio->estado = 1;
         $barrio->save();
+
+        $manzana = new Manzana;
+        $manzana->numero = "Sin Numero";
+        $manzana->division = "Sin Manzana";
+        $manzana->estado = 1;
+        $manzana->save();
+
+        $barrioManzana = new BarriosManzana;
+        $barrioManzana->idBarrio = $barrio->idBarrio;
+        $barrioManzana->idManzana = $manzana->idManzana;
+        $barrioManzana->save();
+
 
         return redirect()->route('barrio.index');
         

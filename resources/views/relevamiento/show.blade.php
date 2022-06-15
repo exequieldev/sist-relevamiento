@@ -19,6 +19,7 @@
                 <th>Manzana</th>
                 <th>Lote</th>
                 <th>Casa</th>
+                <th>Division</th>
             </thead>
             @foreach ($relevamientos as $relevamiento)
               <tr>
@@ -27,6 +28,7 @@
                 <td>{{$relevamiento[0]->descripcion}}</td>
                 <td>{{$relevamiento[0]->lote}}</td>
                 <td>{{$relevamiento[0]->casa}}</td>
+                <td>{{$relevamiento[0]->division}}</td>
               </tr>
             @endforeach   
         </table>

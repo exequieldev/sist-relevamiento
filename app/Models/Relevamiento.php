@@ -13,7 +13,7 @@ class Relevamiento extends Model
 
     protected $primaryKey = "idRelevamiento";
 
-    protected $fillable = ['fechaDesde','idhogar','estado'];
+    protected $fillable = ['fechaDesde','idCasa','estado'];
 
     public $timestamps=false;
 

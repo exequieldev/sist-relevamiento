@@ -13,7 +13,7 @@ class Persona extends Model
 
     protected $primaryKey = "idPersona";
 
-    protected $fillable = ['vinculo','nombres','apellidos','dni','fechaNacimiento','ocupacion','hogares_idhogar'];
+    protected $fillable = ['vinculo','nombres','apellidos','dni','fechaNacimiento','ocupacion','idhogar'];
 
     public $timestamps=false;
 
