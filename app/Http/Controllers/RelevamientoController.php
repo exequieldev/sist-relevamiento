@@ -252,7 +252,7 @@ class RelevamientoController extends Controller
             ->join('barrio_manzanas','barrio_manzanas.idManzana','=','manzanas.idManzana')
             ->join('barrios','barrios.idBarrio','=','barrio_manzanas.idBarrio')
             ->where('relevamientos.estado', 1)
-            ->where('relevamientos.idRelevamiento', $id)
+            ->where('casas.numeroCasa', 10)
             ->select('relevamientos.fechaDesde as fechaDesde','barrios.nombre as nombre','manzanas.division as descripcion','lotes.numero as lote','casas.numeroCasa as casa','casas.division as division')
             ->get()
             ->groupBy('idLote');
