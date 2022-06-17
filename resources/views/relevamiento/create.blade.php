@@ -91,10 +91,10 @@
                                     @if($habitacion->idHabitacion == $detalleHabitacion->idHabitacion )
                                         <li class="list-group-item d-flex justify-content-between align-items-center p-0 pl-2 pr-2"  style="width: 250px;">
                                         <label class="pr-2" for="">{{$detalleHabitacion->nombre}}</label>
-                                            <input  type="checkbox" name="[detallehab{{$habitacion->idHabitacion}}][{{$detalleHabitacion->idHabitacion}}]">
+                                            <input  type="checkbox" name="detallehab[{{$habitacion->idHabitacion}}][{{$detalleHabitacion->idDetalleHabitacion}}]">
                                         </li>
                                     @endif
-                                @endforeach
+                            @endforeach
                             </ul>
                         @endforeach
                     </div>

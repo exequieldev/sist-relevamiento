@@ -18,8 +18,8 @@
             @method('put')
             @csrf
             <div class="form-group">
-                <label for="descripcion">Descripcion</label>
-                <input type="text" name="descripcion" class="form-control" value="{{$manzana->descripcion}}" placeholder="Ingres Descripcion">
+                <label for="descripcion">Número</label>
+                <input type="text" name="descripcion" class="form-control" value="{{$manzana->numero}}" placeholder="Ingres Descripcion">
             </div>
             <div class="form-group">
                 <button class="btn btn-primary" type="submit">Guardar</button>

@@ -181,8 +181,11 @@ class RelevamientoController extends Controller
         $detalleCasa->numeroHabitacion = $request->input('numeroHabitacion');
         $detalleCasa->save();
 
-        $detalleshab = $request->input('detallehab');
 
+        //La parte de habitaciones esta no funcional, se necesita una unión entre la casa y el detalle de la habitación.
+        //La relación de casa con habitacion está mal.
+
+        $detalleshab = $request->input('detallehab');
         if(!empty($detalleshab)){
             //Foreach para Habitaciones y detalles asociados.
              foreach ($detalleshab as $habitacion => $valor) {
@@ -202,7 +205,7 @@ class RelevamientoController extends Controller
 
         }
 
-        //dd($grupos[array_key_last($grupos)]);                     //Obtenemos el num del último grupo registrado.
+        //dd($vinculos);                     //Obtenemos el num del último grupo registrado.
         $indice = 1;
         for ($j=0; $j < $grupos[array_key_last($grupos)]; $j++){
             
@@ -224,13 +227,14 @@ class RelevamientoController extends Controller
                     }
                 }
 
+                $indice++;  
+            }
+            //Se cambio a esta posición porque innecesariamente asociaba el relevamiento n veces a la misma casa según cuantos grupos pertenecian a la casa.        
             $relevamiento = new Relevamiento;
             $relevamiento->fechaDesde = '2022-06-08';
             $relevamiento->idCasa = $casa->idCasa;
             $relevamiento->estado = 1;
             $relevamiento->save();
-            $indice++;
-        }        
 
         return redirect()->route('relevamiento.index');
     }
@@ -243,7 +247,11 @@ class RelevamientoController extends Controller
      */
     public function show($id)
     {
-        $relevamiento = Relevamiento::findOrFail($id);
+        $casa = Casa::join('relevamientos', 'relevamientos.idCasa', '=', 'casas.idCasa')
+        ->where('relevamientos.idRelevamiento', $id)
+        ->first();
+
+        //dd($casa->numeroCasa);
 
         $relevamientos = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
             ->join('lotes','lotes.idLote','=', 'casas.idLote')
@@ -252,10 +260,10 @@ class RelevamientoController extends Controller
             ->join('barrio_manzanas','barrio_manzanas.idManzana','=','manzanas.idManzana')
             ->join('barrios','barrios.idBarrio','=','barrio_manzanas.idBarrio')
             ->where('relevamientos.estado', 1)
-            ->where('casas.numeroCasa', 10)
+            ->where('casas.numeroCasa', $casa->numeroCasa)
             ->select('relevamientos.fechaDesde as fechaDesde','barrios.nombre as nombre','manzanas.division as descripcion','lotes.numero as lote','casas.numeroCasa as casa','casas.division as division')
-            ->get()
-            ->groupBy('idLote');
+            ->groupBy('casas.division')
+            ->get();
             //dd($relevamientos);
 
             $construcciones = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
@@ -263,17 +271,17 @@ class RelevamientoController extends Controller
             ->join('detalleconstrucciones','casasdetalleconstrucciones.iddetalleConstruccion','=', 'detalleconstrucciones.iddetalleConstruccion')
             ->join('construcciones','detalleconstrucciones.idConstruccion','=', 'construcciones.idConstruccion')
             ->where('relevamientos.estado', 1)
-            ->where('relevamientos.idRelevamiento', $id)
-            ->select('construcciones.nombre as nombrecons','detalleConstrucciones.nombre as nombredetallecons')
+            ->where('casas.numeroCasa', $casa->numeroCasa)
+            ->select('construcciones.nombre as nombrecons','detalleConstrucciones.nombre as nombredetallecons', 'casas.division as division')
             ->get();
             //dd($construcciones);
 
 
-            $detallecasa = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
+            $detallecasas = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
             ->join('detallecasa','casas.idCasa','=', 'detallecasa.idCasa')
             ->where('relevamientos.estado', 1)
-            ->where('relevamientos.idRelevamiento', $id)
-            ->select('detallecasa.tipoVivienda as tipovivienda','detallecasa.hacinamiento as hacinamiento', 'detallecasa.numeroHabitacion as habitaciones')
+            ->where('casas.numeroCasa', $casa->numeroCasa)
+            ->select('detallecasa.tipoVivienda as tipovivienda','detallecasa.hacinamiento as hacinamiento', 'detallecasa.numeroHabitacion as habitaciones', 'casas.division as division')
             ->get();
             //dd($detallecasa);
 
@@ -283,8 +291,8 @@ class RelevamientoController extends Controller
             ->join('habitaciones','casahabitaciones.idHabitacion','=', 'habitaciones.idHabitacion')
             ->join('detallehabitaciones','detallehabitaciones.idHabitacion','=', 'habitaciones.idHabitacion')
             ->where('relevamientos.estado', 1)
-            ->where('relevamientos.idRelevamiento', $id)
-            ->select('habitaciones.nombre as nombrehab', 'detallehabitaciones.nombre as nombredetallehab')
+            ->where('casas.numeroCasa', $casa->numeroCasa)
+            ->select('habitaciones.nombre as nombrehab', 'detallehabitaciones.nombre as nombredetallehab', 'casas.division as division')
             ->get();
             //dd($detallehabitaciones);
 
@@ -293,14 +301,14 @@ class RelevamientoController extends Controller
             ->join('hogares','hogares.idCasa', '=', 'casas.idCasa')
             ->join('personas','hogares.idhogar', '=', 'personas.idhogar')
             ->where('relevamientos.estado', 1)
-            ->where('relevamientos.idRelevamiento', $id)
-            ->select('personas.nombres as nombres', 'personas.apellidos as apellidos', 'personas.dni as dni', 'personas.fechaNacimiento as fechanac', 'personas.idhogar as hogar', 'personas.vinculo as vinculo')
+            ->where('casas.numeroCasa', $casa->numeroCasa)
+            ->select('personas.nombres as nombres', 'personas.apellidos as apellidos', 'personas.dni as dni', 'personas.fechaNacimiento as fechanac', 'personas.idhogar as hogar', 'personas.vinculo as vinculo', 'casas.division as division')
             ->get();
             //dd($personas);
 
 
 
-        return view('relevamiento.show',['relevamientos'=>$relevamientos, 'construcciones'=>$construcciones, 'detallecasa'=> $detallecasa, 'detallehabitaciones'=> $detallehabitaciones, 'personas'=>$personas]);
+        return view('relevamiento.show',['relevamientos'=>$relevamientos, 'construcciones'=>$construcciones, 'detallecasas'=> $detallecasas, 'detallehabitaciones'=> $detallehabitaciones, 'personas'=>$personas]);
     }
 
     /**

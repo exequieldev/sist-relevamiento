@@ -11,13 +11,13 @@
         <table class="table table-streped table-bordered table-condensed table-hover">
             <thead>
                 <th>Id</th>
-                <th>Descripcion</th>
+                <th>Número</th>
                 <th>Opciones</th>
             </thead>
             @foreach ($manzanas as $manzana)
               <tr>
                 <td>{{$manzana->idManzana}}</td>
-                <td>{{$manzana->descripcion}}</td>
+                <td>{{$manzana->numero}}</td>
                 <td>
                       <div class="btn-toolbar">
                           <a href="{{url('manzana/'.$manzana->idManzana.'/edit')}}"><button class="btn btn-info" ><i class="fas fa-edit"></i></button></a>
