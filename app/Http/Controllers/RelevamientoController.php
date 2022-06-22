@@ -100,7 +100,7 @@ class RelevamientoController extends Controller
             ->where('casas.numeroCasa','=',$request->casa)
             ->select('casas.numeroCasa as nombre','lotes.idLote as Lote','casas.idCasa','casas.division')
             ->first();
-            //dd($buscarCasa);
+            
             if(!empty($buscarCasa)){
                 
                 $casa = new Casa;
@@ -110,7 +110,9 @@ class RelevamientoController extends Controller
                 $array = array("A", "B", "C", "D","E", "F", "G", "H","I", "J", "K", "L","M", "N", "Ñ", "O","P", "Q", "R", "S","T","U","V","W","X","Y","Z");
                 
                 if (in_array($buscarCasa->division,$array)) {
-                   $casa->division = $array[array_search($buscarCasa->division,$array) + 1];     
+                   
+                   $casa->division = $array[array_search($buscarCasa->division,$array) + 1];  
+                   
                 }
                 
                 $casa->estado = 1;
@@ -158,7 +160,7 @@ class RelevamientoController extends Controller
         $dni = $request->get('dni');
 
         $detallescons = $request->input('detallecons');
-        
+        //dd($detallescons);
 
 
         //Foreach para Construcciones y detalles asociados.
@@ -186,17 +188,16 @@ class RelevamientoController extends Controller
         //La relación de casa con habitacion está mal.
 
         $detalleshab = $request->input('detallehab');
+        
         if(!empty($detalleshab)){
             //Foreach para Habitaciones y detalles asociados.
              foreach ($detalleshab as $habitacion => $valor) {
-                //  print("Habitacion: ");
-                //  print_r($habitacion);
+                
                  foreach ($valor as $detallehab => $value) {
-                    //  print("Detalle Habitacion: ");
-                    //  print($detallehab);
+                    
                      $casaHabitacion = new CasaHabitacion;
                      $casaHabitacion->idCasa = $casa->idCasa;
-                     $casaHabitacion->idHabitacion = $detallehab;
+                     $casaHabitacion->idDetalleHabitacion = $detallehab;
                      $casaHabitacion->save();
                      //insert($habitacion, $detallehab)
     
@@ -204,7 +205,7 @@ class RelevamientoController extends Controller
              }
 
         }
-
+        //dd($casaHabitacion);
         //dd($vinculos);                     //Obtenemos el num del último grupo registrado.
         $indice = 1;
         for ($j=0; $j < $grupos[array_key_last($grupos)]; $j++){
@@ -288,8 +289,8 @@ class RelevamientoController extends Controller
             
             $detallehabitaciones = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
             ->join('casahabitaciones','casas.idCasa','=', 'casahabitaciones.idCasa')
-            ->join('habitaciones','casahabitaciones.idHabitacion','=', 'habitaciones.idHabitacion')
-            ->join('detallehabitaciones','detallehabitaciones.idHabitacion','=', 'habitaciones.idHabitacion')
+            ->join('detallehabitaciones','casahabitaciones.idDetalleHabitacion','=', 'detallehabitaciones.idDetalleHabitacion')
+            ->join('habitaciones','detallehabitaciones.idHabitacion','=', 'habitaciones.idHabitacion')
             ->where('relevamientos.estado', 1)
             ->where('casas.numeroCasa', $casa->numeroCasa)
             ->select('habitaciones.nombre as nombrehab', 'detallehabitaciones.nombre as nombredetallehab', 'casas.division as division')
