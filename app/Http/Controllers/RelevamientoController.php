@@ -34,7 +34,7 @@ class RelevamientoController extends Controller
     public function index()
     {
 
-        $relevamientos = BarriosManzana::orderBy('idBarrio_Manzanas','desc')
+        /*$relevamientos = BarriosManzana::orderBy('idBarrio_Manzanas','desc')
             ->join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')
             ->join('manzanas','barrio_manzanas.idManzana', '=', 'manzanas.idManzana')
             ->join('manzana_lotes','manzana_lotes.idManzana','=','manzanas.idManzana')
@@ -48,7 +48,20 @@ class RelevamientoController extends Controller
             ->get()
             ->groupBy('casa');
             //dd($relevamientos);
-            
+            dd($relevamientos);*/
+
+            $relevamientos = Relevamiento::orderBy('idRelevamiento', 'desc')
+            ->join('casas','relevamientos.idCasa' ,'=' ,'casas.idCasa')
+            ->join('lotes','casas.idLote','=', 'lotes.idLote')
+            ->join('manzana_lotes','lotes.idLote','=', 'manzana_lotes.idLote')
+            ->join('manzanas','manzana_lotes.idManzana','=', 'manzanas.idManzana')
+            ->join('barrio_manzanas','manzanas.idManzana','=', 'barrio_manzanas.idManzana')
+            ->join('barrios','barrio_manzanas.idBarrio','=', 'barrios.idBarrio')
+            ->select('relevamientos.idRelevamiento as idRelevamiento','relevamientos.fechaDesde as fechaDesde','barrios.nombre as nombre','manzanas.division as descripcion','lotes.numero as lote','casas.numeroCasa as casa','casas.division as division')
+            ->get()
+            ->groupBy('casa');
+           // dd($relevamientos);
+
        
         //dd($relevamientos);
         //$relevamientos=Relevamiento::orderBy('idRelevamiento','desc')->where('estado',1)->get();
@@ -91,6 +104,8 @@ class RelevamientoController extends Controller
      */
     public function store(Request $request)
     {
+        try {
+            DB::beginTransaction();
             $buscarCasa = BarriosManzana::orderBy('idCasa','desc')->join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')
             ->join('manzanas','barrio_manzanas.idManzana', '=', 'manzanas.idManzana')
             ->join('manzana_lotes','manzana_lotes.idManzana','=','manzanas.idManzana')
@@ -164,10 +179,12 @@ class RelevamientoController extends Controller
 
 
         //Foreach para Construcciones y detalles asociados.
+        //dd($detallescons);
+        if(!empty($detallescons)){
         foreach ($detallescons as $construccion => $valor) {
             
             foreach ($valor as $detallecons => $value) {
-                
+               
                 //insert($construccion, $detallecons)
                 $casadetalleconstruccion = new CasaDetalleConstruccion;
                 $casadetalleconstruccion->idCasa =  $casa->idCasa;
@@ -175,7 +192,8 @@ class RelevamientoController extends Controller
                 $casadetalleconstruccion->save();
             }
         }
-
+    }
+    
         $detalleCasa = new DetalleCasa;
         $detalleCasa->idCasa = $casa->idCasa;
         $detalleCasa->tipoVivienda = 1;
@@ -188,7 +206,6 @@ class RelevamientoController extends Controller
         //La relación de casa con habitacion está mal.
 
         $detalleshab = $request->input('detallehab');
-        
         if(!empty($detalleshab)){
             //Foreach para Habitaciones y detalles asociados.
              foreach ($detalleshab as $habitacion => $valor) {
@@ -200,16 +217,16 @@ class RelevamientoController extends Controller
                      $casaHabitacion->idDetalleHabitacion = $detallehab;
                      $casaHabitacion->save();
                      //insert($habitacion, $detallehab)
-    
-                 }
-             }
-
+                     
+                    }
+                }    
         }
         //dd($casaHabitacion);
         //dd($vinculos);                     //Obtenemos el num del último grupo registrado.
         $indice = 1;
-        for ($j=0; $j < $grupos[array_key_last($grupos)]; $j++){
-            
+        if(!empty($grupos)){
+            for ($j=0; $j < $grupos[array_key_last($grupos)]; $j++){
+                
                 $grupo = new Hogar;
                 $grupo->idCasa = $casa->idCasa;
                 $grupo->save();
@@ -227,18 +244,23 @@ class RelevamientoController extends Controller
                         $persona->save();
                     }
                 }
-
                 $indice++;  
             }
-            //Se cambio a esta posición porque innecesariamente asociaba el relevamiento n veces a la misma casa según cuantos grupos pertenecian a la casa.        
-            $relevamiento = new Relevamiento;
-            $relevamiento->fechaDesde = '2022-06-08';
-            $relevamiento->idCasa = $casa->idCasa;
-            $relevamiento->estado = 1;
-            $relevamiento->save();
-
+        }
+        
+        //Se cambio a esta posición porque innecesariamente asociaba el relevamiento n veces a la misma casa según cuantos grupos pertenecian a la casa.        
+        $relevamiento = new Relevamiento;
+        $relevamiento->fechaDesde = '2022-06-08';
+        $relevamiento->idCasa = $casa->idCasa;
+        $relevamiento->estado = 1;
+        $relevamiento->save();
+        DB::commit();
         return redirect()->route('relevamiento.index');
+    }catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json(['message' => 'Error']);
     }
+}
 
     /**
      * Display the specified resource.
