@@ -11,7 +11,7 @@ class CasaDetalleConstruccion extends Model
 
     protected $table = "casasdetalleconstrucciones";
 
-    protected $primaryKey = "idCasaDetalleConstruccion";
+    protected $primaryKey = "idCasasdetalleConstrucciones";
 
     protected $fillable = ['idCasa','iddetalleConstruccion'];
 
