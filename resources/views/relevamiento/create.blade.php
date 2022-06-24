@@ -49,8 +49,6 @@
             <ul class="list-group">
             <h5>{{$construccion->nombre}}</h5>
             @foreach ($detalleConstrucciones as $detalleConstruccion)
-            
-                    
                     @if($construccion->idConstruccion == $detalleConstruccion->idConstruccion)
                         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
                         <label class="pr-2" for="">{{$detalleConstruccion->nombre}}</label>
@@ -184,7 +182,7 @@ function crearAcordeon(){
     acordion = acordion + '<div class="row table-responsive">';
     acordion = acordion + '<div class="table-responsive">';
     acordion = acordion + '<table class="col-sm-12 table-bordered table-striped table-condensed ">';
-    acordion = acordion + '<thead>' + '<tr><th scope="col">#</th>' + '<th scope="col">Vinculo</th>' + '<th scope="col">Nombres</th>' +  '<th scope="col">Aperllidos</th>' + ' <th scope="col">Fecha Nacimiento</th>' + '<th scope="col">Dni</th>' + '<th scope="col">Operaciones</th>' + ' </tr>' + ' </thead>' + '<tbody id="tablebody' + incrementador + '">' + '</tbody>' + '</table>' + ' </div>' + ' </div>';
+    acordion = acordion + '<thead>' + '<tr><th scope="col">#</th>' + '<th scope="col">Vinculo</th>' + '<th scope="col">Nombres</th>' +  '<th scope="col">Apellidos</th>' + ' <th scope="col">Fecha Nacimiento</th>' + '<th scope="col">DNI</th>' + '<th scope="col">Operaciones</th>' + ' </tr>' + ' </thead>' + '<tbody id="tablebody' + incrementador + '">' + '</tbody>' + '</table>' + ' </div>' + ' </div>';
     acordion = acordion + '</div>' + '</div>' + '</div>';
 
   

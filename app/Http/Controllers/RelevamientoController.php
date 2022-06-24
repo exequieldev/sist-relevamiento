@@ -49,7 +49,7 @@ class RelevamientoController extends Controller
             ->groupBy('casa');
             //dd($relevamientos);
             dd($relevamientos);*/
-
+            //DB::enableQueryLog();
             $relevamientos = Relevamiento::orderBy('idRelevamiento', 'desc')
             ->join('casas','relevamientos.idCasa' ,'=' ,'casas.idCasa')
             ->join('lotes','casas.idLote','=', 'lotes.idLote')
@@ -60,6 +60,7 @@ class RelevamientoController extends Controller
             ->select('relevamientos.idRelevamiento as idRelevamiento','relevamientos.fechaDesde as fechaDesde','barrios.nombre as nombre','manzanas.division as descripcion','lotes.numero as lote','casas.numeroCasa as casa','casas.division as division')
             ->get()
             ->groupBy('casa');
+            //dd(DB::getQueryLog());
            // dd($relevamientos);
 
        
@@ -342,9 +343,79 @@ class RelevamientoController extends Controller
      */
     public function edit($id)
     {
-        $relevamiento = Relevamiento::findOrFail($id);
+        $hogares = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
+        ->join('hogares','hogares.idCasa', '=', 'casas.idCasa')->where('idRelevamiento', $id)->count();
+        //dd($hogares);
 
-        return view('relevamiento.edit',['relevamiento'=>$relevamiento]);
+        $canthogares = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
+        ->join('hogares','hogares.idCasa', '=', 'casas.idCasa')->where('idRelevamiento', $id)
+        ->groupBy('idhogar')
+        ->get();
+
+        //dd($canthogares);
+
+        $casa = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
+        ->where('idRelevamiento', $id)
+        ->select('casas.numeroCasa')->first();
+        //dd($casa);
+
+        $telefono = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
+        ->join('telefonos','casas.idCasa','=','telefonos.idCasa')
+        ->where('idRelevamiento', $id)
+        ->select('telefonos.numero')
+        ->first();
+
+        //dd($telefono);
+        
+        $detallesconsrel = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
+        ->join('casasdetalleconstrucciones','casas.idCasa','=','casasdetalleconstrucciones.idCasa')
+        ->join('detalleconstrucciones','casasdetalleconstrucciones.iddetalleConstruccion','=','detalleconstrucciones.iddetalleConstruccion')
+        ->select('casasdetalleconstrucciones.iddetalleConstruccion', 'detalleConstrucciones.idConstruccion')
+        ->where('idRelevamiento', $id)
+        ->get();
+
+        //dd($detallesconsrel);
+
+        $detalleshabsrel = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
+        ->join('casahabitaciones','casas.idCasa','=','casahabitaciones.idCasa')
+        ->join('detallehabitaciones','casahabitaciones.idDetalleHabitacion','=','detallehabitaciones.idDetalleHabitacion')
+        ->select('casahabitaciones.idDetalleHabitacion', 'detallehabitaciones.idHabitacion')
+        ->where('idRelevamiento', $id)
+        ->get();
+
+        //dd($detalleshabsrel);
+
+
+        $personas = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
+        ->join('hogares','casas.idCasa','=','hogares.idCasa')
+        ->join('personas','hogares.idhogar','=','personas.idhogar')
+        ->select('personas.vinculo', 'personas.nombres', 'personas.apellidos', 'personas.dni', 'personas.fechaNacimiento', 'hogares.idhogar')
+        ->where('idRelevamiento', $id)
+        ->get();
+
+        //dd($personas);
+
+        $detallecasa = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
+        ->join('detallecasa','casas.idCasa','=','detallecasa.idCasa')
+        ->select('detallecasa.tipoVivienda', 'detallecasa.hacinamiento', 'detallecasa.numeroHabitacion')
+        ->where('idRelevamiento', $id)
+        ->first();
+
+        //dd($detallecasa);
+
+        $detalleConstrucciones = DetalleConstruccion::all();
+        $detalleHabitaciones = DetalleHabitacion::all();
+
+        $habitaciones = Habitacion::where('estado', 1)
+        ->whereIn('idHabitacion', DetalleHabitacion::select('idHabitacion'))          //Para controlar que no devuelva una habitacion sin detalles de habitacion registrados.
+        ->get();
+
+        $construcciones = Construccion::where('estado', 1)
+        ->whereIn('idConstruccion', DetalleConstruccion::select('idConstruccion'))          //Para controlar que no devuelva una construcción sin detalles de construccion registrados.
+        ->get();
+        
+        //dd($construcciones);
+        return view('relevamiento.edit',compact('detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones', 'casa', 'telefono', 'detallesconsrel', 'hogares', 'canthogares', 'detallecasa', 'detalleshabsrel', 'personas'));
     }
 
     /**
