@@ -14,7 +14,7 @@
       </div>
       @endif
 
-    <form action="" method="POST" autocomplete="off">
+    <form action={{url('/relevamiento/'.$relevamiento)}} method="POST" autocomplete="off">
           @method('put')
           @csrf
           <div class="row">
@@ -84,9 +84,9 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
                         <label class="pr-2" for="">Compartida</label>
                             @if($detallecasa->tipoVivienda == 1)
-                                <input  type="checkbox" name="tipoVivienda" id="" value="{{$detallecasa->tipoVivienda}}" checked>
+                                <input  type="checkbox" name="tipoVivienda" id="" value="1" checked>
                             @else
-                                <input  type="checkbox" name="tipoVivienda" id="" value="{{$detallecasa->tipoVivienda}}">
+                                <input  type="checkbox" name="tipoVivienda" id="" value="1">
                             @endif
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
@@ -149,8 +149,9 @@
                         @php
                             $incrementador = 1;
                         @endphp
-                        @foreach($canthogares as $hogar)
+                        @foreach($canthogares as $hogar)    
                             <div class="card">
+                                <input type="hidden" name="grupohogar[]" value="{{$hogar->idhogar}}">
                                 <div class="card-header" id="headingOne{{$incrementador}}">
                                     <h2 class="mb-0">
                                     <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne{{$incrementador}}" aria-expanded="true" aria-controls="collapseOne{{$incrementador}}">Grupo Familiar {{$incrementador}} </button> </h2>
@@ -201,7 +202,7 @@
                                     <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
                                         <div class="form-group">
                                             <label for="" style="visibility:hidden">Agregar Persona</label>
-                                             <button class="form-control" id="btn_add" onclick="agregar({{$incrementador}}), event.preventDefault()">Agregar Persona</button>
+                                             <button class="form-control" id="btn_add" onclick="agregar({{$incrementador}}, {{$hogar->idhogar}}), event.preventDefault()">Agregar Persona</button>
                                         </div>
                                     </div>
 
@@ -224,12 +225,14 @@
                                             @if($persona->idhogar == $hogar->idhogar)
                                             <tr>
                                                 <td> 
+                                                <input type="hidden" name="id[]" value="{{$persona->idPersona}}">
+                                                <input type="hidden" name="hogar[]" value="{{$persona->idhogar}}">
                                                 <input type="hidden" name="grupos[]" value="{{$incrementador}}"></td>
                                                 <td><input type="hidden" name="vinculos[]" value="{{$persona->vinculo}}">{{$persona->vinculo}}</td>
                                                 <td><input type="hidden" name="nombres[]" value="{{$persona->nombres}}">{{$persona->nombres}}</td>
                                                 <td><input type="hidden" name="apellidos[]" value="{{$persona->apellidos}}}}">{{$persona->apellidos}}</td>
-                                                <td><input type="hidden" name="dni[]" value="{{$persona->dni}}">{{$persona->dni}}</td>
-                                                <td><input type="hidden" name="fechaNac[]" value="{{$persona->fechaNacimiento}}">{{$persona->fechaNacimiento}}</td>
+                                                <td><input type="hidden" name="dni[]" value="{{$persona->dni}}">{{$persona->fechaNacimiento}}</td>
+                                                <td><input type="hidden" name="fechaNac[]" value="{{$persona->fechaNacimiento}}">{{$persona->dni}}</td>
                                                 <td>
                                                 <button class="form-control">
                                                 Detalle
@@ -277,6 +280,7 @@ document.getElementById("btn_accordion").addEventListener("click", function(even
 function crearAcordeon(){
     //Cabecera 
     acordion  = '<div class="card">';
+    acordion =  acordion + '<input type="hidden" name="grupohogar[]" value="no">';
     acordion =  acordion + '<div class="card-header" id="headingOne "' + incrementador + '">';
     acordion  =  acordion + '<h2 class="mb-0">';
     acordion = acordion + '<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne' + incrementador + '" aria-expanded="true" aria-controls="collapseOne' + incrementador + '">Grupo Familiar ' + incrementador + ' </button> </h2>';
@@ -334,7 +338,7 @@ function crearAcordeon(){
 
 }
 
-function agregar(inc){
+function agregar(inc, hogar = null){
     console.log(inc);
     vinculo = $("#vinculo" + inc).val();
     nombres = $("#nombres" + inc).val();
@@ -344,6 +348,13 @@ function agregar(inc){
 
     if (vinculo != "" && nombres != "" && apellidos != "" && dni != "" && fechaNac != ""){
                 var fila = '<tr>';
+                fila = fila + '<input type="hidden" name="id[]" value="no">';
+                if(hogar != null){
+                    fila = fila + '<input type="hidden" name="hogar[]" value="'+hogar+'" >';
+                } else {
+                    fila = fila + '<input type="hidden" name="hogar[]" value="no" >';
+                }
+                
                 fila = fila + '<td>' + '<input type="hidden" name="grupos[]" value="'+inc+'">'+'</td>';
                 fila = fila + '<td><input type="hidden" name="vinculos[]" value="' + vinculo + '">' + vinculo + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="nombres[]" value="' + nombres + '">' + nombres + '</td>' ;
