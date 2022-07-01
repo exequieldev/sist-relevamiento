@@ -37,6 +37,15 @@ class ConstruccionController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'nombre' => 'required|unique:construcciones'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de Construcción, no se admiten campos vacios.',
+            'nombre.unique' => 'La Construcción que intenta ingresar ya existe.'
+        ]
+    
+        );
         $construccion = new Construccion;
         $construccion->nombre = $request->get('nombre');
         $construccion->estado = 1;
@@ -85,6 +94,14 @@ class ConstruccionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'nombre' => 'required'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de Construcción, no se admiten campos vacios.',
+        ]
+        );
+
         $construccion = Construccion::findOrFail($id);
         $construccion->nombre = $request->get('nombre');
         $construccion->update();

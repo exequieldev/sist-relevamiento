@@ -39,6 +39,16 @@ class HabitacionController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'nombre' => 'required|unique:habitaciones'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de Habitación, no se admiten campos vacios.',
+            'nombre.unique' => 'La Habitación que intenta ingresar ya existe.'
+        ]
+    
+        );
+
         $habitacion = new Habitacion;
         $habitacion->nombre = $request->get('nombre');
         $habitacion->estado = 1;
@@ -87,6 +97,15 @@ class HabitacionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'nombre' => 'required'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de Habitación, no se admiten campos vacios.'
+        ]
+    
+        );
+
         $habitacion = Habitacion::findOrFail($id);
         $habitacion->nombre = $request->get('nombre');
         $habitacion->update();

@@ -31,7 +31,7 @@
                 <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
                     <div class="form-group">
                         <label for="casa">Casa N°</label>
-                        <input type="text" name="casa" class="form-control" placeholder="Ingrese numero de la casa">
+                        <input type="text" name="casa" value="{{old('casa')}}" class="form-control" placeholder="Ingrese numero de la casa">
                         
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
                         <label class="pr-2" for="">N° Habitacion</label>
-                            <input style="width: 50px" type="number" name="numeroHabitacion" id="">
+                            <input style="width: 50px" min="1" type="number" name="numeroHabitacion" value="{{old('numeroHabitacion')}}" id="">
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center p-2">
                         <label class="pr-2" for="">Hacinamiento</label>
@@ -226,9 +226,9 @@ function agregar(inc){
                 fila = fila + '<td><input type="hidden" name="vinculos[]" value="' + vinculo + '">' + vinculo + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="nombres[]" value="' + nombres + '">' + nombres + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="apellidos[]" value="' + apellidos + '">' + apellidos + '</td>' ;
-                fila = fila + '<td><input type="hidden" name="fechaNac[]" value="' + fechaNac + '">' + fechaNac + '</td>' ;
+                fila = fila + '<td><input type="hidden" name="fechaNac[]" value="' + fechaNac + '" class="fechaNac">' + fechaNac + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="dni[]" value="' + dni + '">' + dni + '</td>' ;
-                fila = fila + '<td>' + '<button class="form-control" data-toggle="modal" data-target="#staticBackdrop">'+ 'Detalle' + '</button>' + '</td>' ;
+                fila = fila + '<td>' + '<button class="form-control" data-toggle="modal" data-target="#staticBackdrop" onclick="detalle()">'+ 'Detalle' + '</button>' + '</td>' ;
                 fila = fila + '</tr>' ;
                 limpiar(inc);
 
@@ -237,6 +237,12 @@ function agregar(inc){
 } else {
     alert("Error al ingresar los datos de la persona en el grupo familiar.") ;
 }
+}
+
+function detalle(){
+    this.addEventListener("click", (e) => {
+        e.preventDefault();
+    });
 }
 
 

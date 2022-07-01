@@ -108,6 +108,23 @@ class RelevamientoController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'numeroHabitacion' => 'required|integer|gt:0',
+            'casa' => 'required|numeric|gt:0',
+            'fechaNac'  => 'required|date_format:Y-m-d'
+        ],
+        [
+            'numeroHabitacion.required' => 'Debe especificar una cantidad de habitaciones.',
+            'numeroHabitacion.integer' => 'El Número de Habitaciones debe ser un número.',
+            'numeroHabitacion.gt' => 'El Número de Habitaciones debe ser 1 o más.',
+            'casa.required' => 'Debe especificar el número de la Casa.',
+            'casa.numeric' => 'Debe especificarse un número de Casa, no letras, no símbolos.',
+            'casa.gt' => 'El número de la Casa debe mayor que 0.',
+            'fechaNac.required' => 'Debe especificar una fecha de nacimiento.',
+            'fechaNac.date_format' => 'La fecha debe estar especificada de la siguiente manera: "Año/Mes/Dia".'
+        ]
+        );
+
         try {
             DB::beginTransaction();
             $buscarCasa = BarriosManzana::orderBy('idCasa','desc')->join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')

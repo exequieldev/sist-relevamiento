@@ -18,7 +18,7 @@
           @csrf
           <div class="form-group">
               <label for="nombre">Nombre</label>
-              <input type="text" name="nombre" class="form-control" placeholder="Ingrese nombre">
+              <input type="text" name="nombre" value= "{{old('nombre')}}"class="form-control" placeholder="Ingrese nombre">
           </div>
           <div class="form-group">
               <button class="btn btn-primary" type="submit">Guardar</button>

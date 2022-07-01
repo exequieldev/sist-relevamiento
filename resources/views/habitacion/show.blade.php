@@ -5,7 +5,16 @@
   <div class="row">
     <h1>Detalle Habitacion de {{$nombre}}<a href="{{url('/habitacion/')}}"><button class="btn btn-primary">Volver</button></a></h1>
   </div>
-<br>
+  <br>
+  @if(count($errors)>0)
+      <div class="alert alert-danger">
+          <ul>
+              @foreach ($errors->all() as $error)
+                  <li>{{$error}}</li>
+              @endforeach
+          </ul>
+      </div>
+  @endif
 <div class="row">
     <div class="col-lg-12 col-md-8 col-sm-8 col-sx-8 ">
     <form action={{url('/detallehabitacion/')}} method="POST" autocomplete="off">

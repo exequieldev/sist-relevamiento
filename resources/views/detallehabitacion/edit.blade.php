@@ -14,7 +14,7 @@
             </ul>
         </div>
         @endif
-        <form action={{url('/detallehabitacion/'.$detallehabitacion->iddetalleHabitacion)}} method="POST" autocomplete="off">
+        <form action={{url('/detallehabitacion/'.$detallehabitacion->idDetalleHabitacion)}} method="POST" autocomplete="off">
             @method('put')
             @csrf
             <div class="form-group">

@@ -6,6 +6,15 @@
     <h1>Detalle Construccion de {{$nombre}}<a href="{{url('/construccion/')}}"><button class="btn btn-primary">Volver</button></a></h1>
   </div>
 <br>
+@if(count($errors)>0)
+      <div class="alert alert-danger">
+          <ul>
+              @foreach ($errors->all() as $error)
+                  <li>{{$error}}</li>
+              @endforeach
+          </ul>
+      </div>
+@endif
 <div class="row">
     <div class="col-lg-12 col-md-8 col-sm-8 col-sx-8 ">
     <form action={{url('/detalleconstruccion/')}} method="POST" autocomplete="off">
@@ -13,7 +22,7 @@
             <div class="form-group">
                 <input type="hidden" name="construccion" value="{{$idConstruccion}}">
                 <label for="nombre">Nombre</label>
-                <input type="text" name="nombre" class="form-control" placeholder="Ingrese nombre">
+                <input type="text" name="nombre" value="{{old('nombre')}}" class="form-control" placeholder="Ingrese nombre">
             </div>
             <div class="form-group">
                 <button class="btn btn-success" type="submit">Nuevo</button>

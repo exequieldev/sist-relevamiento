@@ -35,6 +35,15 @@ class DetalleHabitacionController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'nombre' => 'required|unique:detallehabitaciones'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de Detalle de Habitación, no se admiten campos vacios.',
+            'nombre.unique' => 'El Detalle de Habitación que intenta ingresar ya existe.'
+        ]
+    
+        );
         $detallehabitacion = new DetalleHabitacion;
         $detallehabitacion->nombre = $request->get('nombre');
         $detallehabitacion->estado = 1;
@@ -77,11 +86,20 @@ class DetalleHabitacionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $detalleHabitacion = DetalleHabitacion::findOrFail($id);
-        $detallehabitacion->nombre = $request->get('nombre');
-        $detallehabitacion->update();
+        $request->validate([
+            'nombre' => 'required'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de Detalle de Habitación, no se admiten campos vacios.'
+        ]
+    
+        );
 
-        return redirect()->route('habitacion.show', $detallehabitacion->idhabitacion);
+        $detalleHabitacion = DetalleHabitacion::findOrFail($id);
+        $detalleHabitacion->nombre = $request->get('nombre');
+        $detalleHabitacion->update();
+
+        return redirect()->route('habitacion.show', $detalleHabitacion->idHabitacion);
     }
 
     /**

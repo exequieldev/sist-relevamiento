@@ -43,7 +43,16 @@ class BarrioController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $request->validate([
+            'nombre' => 'required|unique:barrios|alpha_num',
+            
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de Barrio, no se admiten campos vacios.',
+            'nombre.unique' => 'El Barrio que intenta ingresar ya existe.',
+            'nombre.alpha_num' => 'El nombre del Barrio debe contener letras y números.'
+        ]
+        );
         
         $barrio = new Barrio;
         $barrio->nombre = $request->get('nombre');
@@ -101,6 +110,14 @@ class BarrioController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'nombre' => 'required'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de Barrio, no se admiten campos vacios.'
+        ]
+        );
+
         $barrio = Barrio::findOrFail($id);
         $barrio->nombre = $request->get('nombre');
         $barrio->update();

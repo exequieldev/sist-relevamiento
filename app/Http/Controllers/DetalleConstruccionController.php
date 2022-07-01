@@ -35,6 +35,15 @@ class DetalleConstruccionController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'nombre' => 'required|unique:detalleconstrucciones'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de Detalle de Construcción, no se admiten campos vacios.',
+            'nombre.unique' => 'El Detalle de Construcción que intenta ingresar ya existe.'
+        ]
+    
+        );
         $detalleconstruccion = new DetalleConstruccion;
         $detalleconstruccion->nombre = $request->get('nombre');
         $detalleconstruccion->estado = 1;
@@ -77,6 +86,14 @@ class DetalleConstruccionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'nombre' => 'required'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de Detalle de Construcción, no se admiten campos vacios.'
+        ]
+    
+        );
         $detalleconstruccion = DetalleConstruccion::findOrFail($id);
         $detalleconstruccion->nombre = $request->get('nombre');
         $detalleconstruccion->update();

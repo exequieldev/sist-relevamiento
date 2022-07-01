@@ -98,7 +98,7 @@ class CasaController extends Controller
      */
     public function destroy($id)
     {
-        $csa = Casa::findOrFail($id);
+        $casa = Casa::findOrFail($id);
         $casa->estado=0;
         $casa->update();
 
