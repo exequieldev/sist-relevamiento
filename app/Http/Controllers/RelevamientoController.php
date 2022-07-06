@@ -87,7 +87,8 @@ class RelevamientoController extends Controller
         $lotes = Lote::all();
         $detalleConstrucciones = DetalleConstruccion::all();
         $detalleHabitaciones = DetalleHabitacion::all();
-
+        $niveles = DB::table('niveles')->get()->toArray();
+        $patologias = DB::table('patologias')->get()->toArray();
         $habitaciones = Habitacion::where('estado', 1)
         ->whereIn('idHabitacion', DetalleHabitacion::select('idHabitacion'))          //Para controlar que no devuelva una habitacion sin detalles de habitacion registrados.
         ->get();
@@ -97,7 +98,7 @@ class RelevamientoController extends Controller
         ->get();
         
         //dd($construcciones);
-        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones'));
+        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones', 'niveles', 'patologias'));
     }
 
     /**
@@ -111,7 +112,7 @@ class RelevamientoController extends Controller
         $request->validate([
             'numeroHabitacion' => 'required|integer|gt:0',
             'casa' => 'required|numeric|gt:0',
-            'fechaNac'  => 'required|date_format:Y-m-d'
+            'fechaNac.*'  => 'required|date_format:Y-m-d'
         ],
         [
             'numeroHabitacion.required' => 'Debe especificar una cantidad de habitaciones.',
@@ -120,8 +121,8 @@ class RelevamientoController extends Controller
             'casa.required' => 'Debe especificar el número de la Casa.',
             'casa.numeric' => 'Debe especificarse un número de Casa, no letras, no símbolos.',
             'casa.gt' => 'El número de la Casa debe mayor que 0.',
-            'fechaNac.required' => 'Debe especificar una fecha de nacimiento.',
-            'fechaNac.date_format' => 'La fecha debe estar especificada de la siguiente manera: "Año/Mes/Dia".'
+            'fechaNac.*required' => 'Debe especificar una fecha de nacimiento.',
+            'fechaNac.*date_format' => 'La fecha debe estar especificada de la siguiente manera: "Año/Mes/Dia".'
         ]
         );
 
@@ -244,6 +245,19 @@ class RelevamientoController extends Controller
         }
         //dd($casaHabitacion);
         //dd($vinculos);                     //Obtenemos el num del último grupo registrado.
+
+
+        $embarazo = $request->get('embarazada');
+        $mesesembarazo = $request->get('mesesemb');
+        $patologia = $request->get('patologia');
+        $patologiapersona = $request->get('patologias');
+        $escolaridad = $request->get('escolaridad');
+        $niveles = $request->get('niveles');
+        $ocupacion = $request->get('ocupacion');
+        
+
+        dd($embarazo, $mesesembarazo, $patologia, $patologiapersona, $escolaridad, $niveles, $ocupacion);
+
         $indice = 1;
         if(!empty($grupos)){
             for ($j=0; $j < $grupos[array_key_last($grupos)]; $j++){
@@ -258,9 +272,9 @@ class RelevamientoController extends Controller
                         $persona->vinculo = $vinculos[$i];
                         $persona->nombres = $nombres[$i];
                         $persona->apellidos = $apellidos[$i];
-                        $persona->fechaNacimiento = '2022-06-08';
-                        $persona->dni = $dni[$i];
-                        $persona->ocupacion = 'maestro';
+                        $persona->fechaNacimiento = $fechaNac[$i];
+                        $persona->dni = $dni[$i];   
+                        $persona->ocupacion = $ocupacion[$i];
                         $persona->idhogar = $grupo->idhogar;
                         $persona->save();
                     }

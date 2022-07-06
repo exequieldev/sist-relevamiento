@@ -318,6 +318,8 @@
               <button class="btn btn-primary" type="submit">Guardar</button>
               <button class="btn btn-danger" type="reset">Cancelar</button>
           </div>
+
+          
     </form>
 
   </div> 
@@ -325,6 +327,9 @@
   
 <script>
 incrementador = 1;
+persona = 1;
+var niveles = <?php echo json_encode($niveles); ?>;
+var patologias = <?php echo json_encode($patologias); ?>;
 
 document.getElementById("btn_accordion").addEventListener("click", function(event){
   event.preventDefault();
@@ -394,15 +399,15 @@ function crearAcordeon(){
     acordion = acordion + '<div class="row mt-3">';
 
     acordion = acordion + '<div col-lg-3 >'
-    acordion = acordion + '<button type=button class="form-control" data-toggle="modal" data-target="#saludFamiliar" >Salud Grupo Familar</button>'
+    acordion = acordion + '<button type=button class="form-control" data-toggle="modal" data-target="#saludFamiliar' + incrementador + '" >Salud Grupo Familar</button>'
     acordion = acordion + '</div>';
 
     acordion = acordion + '<div col-lg-3 >'
-    acordion = acordion + '<button type=button class="form-control" data-toggle="modal" data-target="#politicasSociales">Politicas Sociales</button>'
+    acordion = acordion + '<button type=button class="form-control" data-toggle="modal" data-target="#politicasSociales' + incrementador + '">Politicas Sociales</button>'
     acordion = acordion + '</div>';
 
     acordion = acordion + '<div col-lg-3>'
-    acordion = acordion + '<button type=button class="form-control" data-toggle="modal" data-target="#politicasProvinciales">Politicas Provinciales</button>'
+    acordion = acordion + '<button type=button class="form-control" data-toggle="modal" data-target="#politicasProvinciales' + incrementador + '">Politicas Provinciales</button>'
     acordion = acordion + '</div>';
 
     acordion = acordion + '</div>';
@@ -425,22 +430,25 @@ function agregar(inc){
     dni = $("#dni" + inc).val();
     fechaNac = $("#fechaNac" + inc).val();
 
+    console.log('Genero', genero);
+
     if (vinculo != "" && nombres != "" && apellidos != "" && dni != "" && fechaNac != "" && genero != ""){
                 var fila = '<tr>';
                 fila = fila + '<td>' + '<input type="hidden" name="grupos[]" value="'+inc+'">'+'</td>';
                 fila = fila + '<td><input type="hidden" name="vinculos[]" value="' + vinculo + '">' + vinculo + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="nombres[]" value="' + nombres + '">' + nombres + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="apellidos[]" value="' + apellidos + '">' + apellidos + '</td>' ;
+                fila = fila + '<td><input type="hidden" name="generos[]" value="' + genero + '">' + genero + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="fechaNac[]" value="' + fechaNac + '" class="fechaNac">' + fechaNac + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="dni[]" value="' + dni + '">' + dni + '</td>' ;
-                fila = fila + '<td>' + '<button class="form-control" data-toggle="modal" data-target="#staticBackdrop" onclick="detalle()">'+ 'Detalle' + '</button>' + '</td>' ;
+                fila = fila + '<td>' + '<button class="form-control" data-toggle="modal" data-target="#detallePersona'+persona+'" onClick="event.preventDefault()">'+ 'Detalle' + '</button>' + '</td>' ;
                 fila = fila + '</tr>' ;
                 limpiar(inc);
 
                 $("#tablebody" + inc).append(fila) ;
 
                 //Cabecera Modal
-                modal =         '<div class="modal fade" id="detallePersona'+inc+'" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">'
+                modal =         '<div class="modal fade" id="detallePersona'+persona+'" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">'
                 modal = modal +   '<div class="modal-dialog">'
                 modal = modal +     '<div class="modal-content">'
 
@@ -450,28 +458,60 @@ function agregar(inc){
 
                 modal = modal +  '<div class="modal-body">'
                 //Situacion Habitacional
-                modal = modal +  '<h3>Situacion Habitacional</h3>'
-                modal = modal +  '<div class="form-group">'     
-                modal = modal +     '<label for="">Permiso de Ocupacion</label>'
-                modal = modal +     '<input type="file" class="form-control-file" name="" id="" placeholder="" aria-describedby="fileHelpId">'
-                modal = modal +  '</div>'
+                // modal = modal +  '<h3>Situacion Habitacional</h3>'
+                // modal = modal +  '<div class="form-group">'     
+                // modal = modal +     '<label for="">Permiso de Ocupacion</label>'
+                // modal = modal +     '<input type="file" class="form-control-file" name="" id="" placeholder="" aria-describedby="fileHelpId">'
+                // modal = modal +  '</div>'
 
-                //Datos Medicod de la Persona
+                //Datos Medicos de la Persona
                 modal = modal +  '<h3>Datos Medicos de la Persona</h3>'
-                modal = modal +  '<div class="form-group" style="display: none" id="embarazada"><label for="">Meses de Embarazo</label><input type="email" class="form-control" name="" id="" aria-describedby="emailHelpId" placeholder=""></div>'
-                modal = modal +  '<div class="form-group"><label for="">Patologia</label><select class="form-control" name="" id=""><option>Seleccione...</option><option></option><option></option></select> </div>'   
-                modal = modal +  '<div class="form-group"><label for="">CUD</label><input type="file" class="form-control-file" name="" id="" placeholder="" aria-describedby="fileHelpId"></div>'
+
+                //Embarazo
+                if(genero == 'Femenino'){
+                  modal = modal + '<label for="">Embarazada</label><br><label for="">Si</label><input type="radio" name="embarazada[]" id="siembarazada'+persona+'" value="Si" onclick="mesesEmb('+persona+', this.id)"><br><label for="">No </label><input type="radio" name="embarazada[]" id="noembarazada'+persona+'" value="No" onclick="mesesEmb('+persona+', this.id)" checked>';
+  
+                  //Meses Embarazo
+                  modal = modal +  '<div class="form-group" style="display:none" id="mesesembarazo'+persona+'"><label for="">Meses de Embarazo</label><input type="text" class="form-control" name="mesesemb[]" placeholder=""></div>';
+                }
+
+                //Patologia
+                modal = modal + '<div class="form-group"><label for="">Patologia</label><br><label for="">Si</label><input type="radio" name="patologia[]" id="sipatologia'+persona+'" value="Si" onclick="patologiaPersona('+persona+', this.id)"><br><label for="">No </label><input type="radio" name="patologia[]" id="nopatologia'+persona+'" value="No" onclick="patologiaPersona('+persona+', this.id)" checked></div>';
+
+                //Select Patologia
+                modal = modal +  '<div class="form-group" style="display:none" id="patologias'+persona+'"><select class="form-control" name="patologias[]" id=""><option selected disabled>Seleccione...</option>';
+                
+                for(i=0; i<patologias.length; i++){
+                    modal = modal + '<option value="'+ patologias[i].idPatologia +'">' + patologias[i].nombre + '</option>';
+                }
+                modal = modal + '</select></div>';
+
+                //CUD Patologia
+                modal = modal +  '<div class="form-group" style="display:none" id="cud'+persona+'"><label for="">CUD</label><input type="file" class="form-control-file" name="" id="" placeholder="" aria-describedby="fileHelpId"></div>'
                 
                 //Datos Escolares
                 modal = modal +  '<h3>Datos Escolares</h3>'
-                modal = modal +  '<div class="form-group"><label for="">Nivel de Estudio</label><select class="form-control" name="" id=""><option>Seleccione...</option><option>Primaria</option> <option>Secundaria</option></select></div>'
+
+                //Escolaridad
+                modal = modal + '<div class="form-group"><label for="">Escolaridad</label><br><label for="">Si</label><input type="radio" name="escolaridad[]" id="siescolaridad'+persona+'" value="Si" onclick="escolaridadPersona('+persona+', this.id)"><br><label for="">No </label><input type="radio" name="escolaridad[]" id="noescolaridad'+persona+'" value="No" onclick="escolaridadPersona('+persona+', this.id)" checked></div>';
+
+                //Select Nivel
+                modal = modal +  '<div class="form-group" style="display:none" id="nivel'+persona+'"><label for="">Nivel de Estudio</label><select class="form-control" name="niveles[]" id=""><option selected disabled>Seleccione...</option>';
+
+                for(i=0; i<niveles.length; i++){
+                    modal = modal + '<option value="'+ niveles[i].idNivel +'">' + niveles[i].nombre + '</option>';
+                }
+
+                modal = modal + '</select></div>';
                 
                 //Datos de trabajo
+                //Ocupacion
                 modal = modal +  '<h3>Datos de Trabajo</h3>'
-                modal = modal +  '<div class="form-group"><label for="">Ocupacion</label><select class="form-control" name="" id=""><option>Seleccione...</option><option>Desocupado</option><option>Empleado</option></select></div>'   
+                modal = modal +  '<div class="form-group"><label for="">Ocupación</label><select class="form-control" name="ocupacion[]" id=""><option selected disabled>Seleccione...</option><option value="Obrero">Obrero</option><option value="Panadero">Panadero</option></select></div>'   
                
+                //Trabajo Registrado
                 modal = modal +   '<div class="form-group">'
-                modal = modal +   '<label for="">Trabajo Registrado</label><select class="form-control" name="" id=""><option>Seleccione...</option><option></option><option></option></select>'
+                modal = modal +   '<label for="">Trabajo Registrado</label><select class="form-control" name="trabajoreg[]" id=""><option selected disabled>Seleccione...</option><option>Trabajador en Relación de Dependencia</option><option>Autónomo-Responsable Inscripto</option><option>Monotributista</option></select>'
                 modal = modal +   '</div>'
 
                 modal = modal +   '<div class="form-group">'
@@ -488,6 +528,7 @@ function agregar(inc){
                 modal = modal + '</div>'
                
                 $('#modal').append(modal);
+                persona++;
 } else {
     alert("Error al ingresar los datos de la persona en el grupo familiar.") ;
 }
@@ -497,6 +538,57 @@ function detalle(){
     this.addEventListener("click", (e) => {
         e.preventDefault();
     });
+}
+
+function mesesEmb(pers, id){
+
+  $mesesembarazo = document.getElementById('mesesembarazo'+pers);
+  console.log(id, pers);
+  
+  console.log(id.includes('noembarazada'), "no embarazada");
+  console.log(id.includes('siembarazada'), "embarazada");
+  
+
+  if (id != null && id.includes('noembarazada') && $mesesembarazo != null){
+    $mesesembarazo.style.display = "none";
+  }
+
+  if (id != null && id.includes('siembarazada') && $mesesembarazo != null){
+    $mesesembarazo.style.display = "";
+  }
+}
+
+function patologiaPersona(pers, id){
+
+$patologias = document.getElementById('patologias'+pers);
+$cud = document.getElementById('cud'+pers);
+
+console.log(id, pers);
+
+
+if (id != null && id.includes('nopatologia') && $patologias != null){
+  $patologias.style.display = "none";
+  $cud.style.display = "none";
+}
+
+if (id != null && id.includes('sipatologia') && $patologias != null){
+  $patologias.style.display = "";
+  $cud.style.display = "";
+}
+}
+
+function escolaridadPersona(pers, id){
+
+$nivel = document.getElementById('nivel'+pers);
+
+
+if (id != null && id.includes('noescolaridad') && $nivel != null){
+  $nivel.style.display = "none";
+}
+
+if (id != null && id.includes('siescolaridad') && $nivel != null){
+  $nivel.style.display = "";
+}
 }
 
 
