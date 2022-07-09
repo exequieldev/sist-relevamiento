@@ -439,9 +439,117 @@ function crearAcordeon(){
     acordion = acordion + '</div>' + '</div>' + '</div>';
 
   
-    $("#accordionExample").append(acordion);
-    incrementador++;
+    
 
+    //Sludo Grupo Familiar
+    //Cabecera Modal
+                modal =         '<div class="modal fade" id="saludFamiliar'+incrementador+'" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">'
+                modal = modal + '<div class="modal-dialog">'
+                modal = modal + '<div class="modal-content">'
+
+                modal = modal + '<div class="modal-header"><h5 class="modal-title" id="staticBackdropLabel">Salud Grupo Familiar</h5>'
+                modal = modal + '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+                modal = modal + '</div>'
+
+                modal = modal +  '<div class="modal-body">'
+
+                //Obra Social
+                modal = modal + '<div class="form-group"><label for="">Obra Social</label></div>';
+                modal = modal + '<div class="form-group" id="obraSociales'+incrementador+'"><select class="form-control" name="obraSociales[]" id=""><option selected disabled>Seleccione...</option>';
+                // for(i=0; i<instituciones.length; i++){
+                //      modal = modal + '<option value="'+ instituciones[i].idInstiucionesMedicas +'">' + instituciones[i].nombre + '</option>';
+                // }
+                modal = modal + '</select></div>';
+                
+                  //Instituciones Medicas
+                modal = modal + '<div class="form-group"><label for="">Institucion Medica</label></div>';
+                modal = modal + '<div class="form-group" id="insticuciones'+incrementador+'"><select class="form-control" name="insticuciones[]" id=""><option selected disabled>Seleccione...</option>';
+                // for(i=0; i<instituciones.length; i++){
+                //      modal = modal + '<option value="'+ instituciones[i].idInstiucionesMedicas +'">' + instituciones[i].nombre + '</option>';
+                // }
+                modal = modal + '</select></div>';
+
+                //Botones
+                modal = modal + '<div class="modal-footer">'
+                modal = modal + '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>'
+                modal = modal + '<button type="button" class="btn btn-primary">Guardar</button>'
+                modal = modal + '</div>'
+
+                modal = modal + '</div>'
+                modal = modal + '</div>'
+                modal = modal + '</div>'
+
+                $('#modal').append(modal);
+
+    //Politicas Sociales
+    //Cabecera Modal
+                modal =         '<div class="modal fade" id="politicasSociales'+incrementador+'" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">'
+                modal = modal + '<div class="modal-dialog">'
+                modal = modal + '<div class="modal-content">'
+
+                modal = modal + '<div class="modal-header"><h5 class="modal-title" id="staticBackdropLabel">Politicas Sociales</h5>'
+                modal = modal + '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+                modal = modal + '</div>'
+
+                modal = modal +  '<div class="modal-body">'
+
+                //Programas Sociales
+                modal = modal + '<div class="form-group"><h3 for="">Programas Sociales</h3></div>';
+                modal = modal + '<p"><label>Nombre del programas Social</label><input class="ml-3" placeholder="Cantidad"></input></p>';
+                modal = modal + '<p><label>Nombre del programas Social </label><input class="ml-3" placeholder="Cantidad"></input></p>';
+                modal = modal + '<p><label>Nombre del programas Social </label><input class="ml-3" placeholder="Cantidad"></input></p>';
+
+                //Moviento Social
+                modal = modal + '<div class="form-group"><h3 for="">Movimiento Social</h3></div>';
+                modal = modal + '<div class="form-group" id="obraSociales'+incrementador+'"><select class="form-control" name="obraSociales[]" id=""><option selected disabled>Seleccione...</option>';
+                // for(i=0; i<instituciones.length; i++){
+                //      modal = modal + '<option value="'+ instituciones[i].idInstiucionesMedicas +'">' + instituciones[i].nombre + '</option>';
+                // }
+                modal = modal + '</select></div>';
+
+                //Botones
+                modal = modal + '<div class="modal-footer">'
+                modal = modal + '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>'
+                modal = modal + '<button type="button" class="btn btn-primary">Guardar</button>'
+                modal = modal + '</div>'
+                
+                modal = modal + '</div>'
+                modal = modal + '</div>'
+                modal = modal + '</div>'
+               
+                $('#modal').append(modal);
+
+    //Politicas Provinciales
+    //Cabecera Modal
+    modal =         '<div class="modal fade" id="politicasProvinciales'+incrementador+'" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">'
+                modal = modal + '<div class="modal-dialog">'
+                modal = modal + '<div class="modal-content">'
+
+                modal = modal + '<div class="modal-header"><h5 class="modal-title" id="staticBackdropLabel">Politicas Sociales</h5>'
+                modal = modal + '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+                modal = modal + '</div>'
+
+                modal = modal +  '<div class="modal-body">'
+
+                //Programas Sociales
+                modal = modal + '<div class="form-group"><h3 for="">Programas Provinciales</h3></div>';
+                modal = modal + '<p"><label>Nombre del programas Social</label><input class="ml-3" placeholder="Cantidad"></input></p>';
+                modal = modal + '<p><label>Nombre del programas Social </label><input class="ml-3" placeholder="Cantidad"></input></p>';
+                modal = modal + '<p><label>Nombre del programas Social </label><input class="ml-3" placeholder="Cantidad"></input></p>';
+                
+                //Botones
+                modal = modal + '<div class="modal-footer">'
+                modal = modal + '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>'
+                modal = modal + '<button type="button" class="btn btn-primary">Guardar</button>'
+                modal = modal + '</div>'
+
+                modal = modal + '</div>'
+                modal = modal + '</div>'
+                modal = modal + '</div>'
+               
+                $('#modal').append(modal);
+                $("#accordionExample").append(acordion);
+                incrementador++;
 }
 
 function agregar(inc){
