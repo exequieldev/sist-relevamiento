@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\SituacionOcupacional;
 
 class SituacionOcupacionalController extends Controller
 {
@@ -13,7 +14,9 @@ class SituacionOcupacionalController extends Controller
      */
     public function index()
     {
-        //
+        $situacionesocupacionales = SituacionOcupacional::orderBy('idsituacionesOcupacionales','desc')->where('estado',1)->paginate(5);
+
+        return view('situacionocupacional.index', ['situacionesocupacionales'=>$situacionesocupacionales]);
     }
 
     /**
@@ -23,7 +26,7 @@ class SituacionOcupacionalController extends Controller
      */
     public function create()
     {
-        //
+        return view('situacionocupacional.create');
     }
 
     /**
@@ -34,7 +37,12 @@ class SituacionOcupacionalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $situacionocupacional = new SituacionOcupacional;
+        $situacionocupacional->nombre = $request->get('nombre');
+        $situacionocupacional->estado = 1;
+        $situacionocupacional->save();
+
+        return redirect()->route('situacionocupacional.index');
     }
 
     /**
@@ -56,7 +64,9 @@ class SituacionOcupacionalController extends Controller
      */
     public function edit($id)
     {
-        //
+        $situacionocupacional = SituacionOcupacional::findOrFail($id);
+
+        return view('situacionocupacional.edit',['situacionocupacional'=>$situacionocupacional]);
     }
 
     /**
@@ -68,7 +78,11 @@ class SituacionOcupacionalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $situacionocupacional = SituacionOcupacional::findOrFail($id);
+        $situacionocupacional->nombre = $request->get('nombre');
+        $situacionocupacional->update();
+
+        return redirect()->route('situacionocupacional.index');
     }
 
     /**
@@ -79,6 +93,10 @@ class SituacionOcupacionalController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $situacionocupacional = SituacionOcupacional::findOrFail($id);
+        $situacionocupacional->estado=0;
+        $situacionocupacional->update();
+
+        return redirect()->route('situacionocupacional.index');
     }
 }

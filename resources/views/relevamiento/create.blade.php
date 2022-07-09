@@ -330,6 +330,11 @@ incrementador = 1;
 persona = 1;
 var niveles = <?php echo json_encode($niveles); ?>;
 var patologias = <?php echo json_encode($patologias); ?>;
+var vinculos = <?php echo json_encode($vinculos); ?>;
+var generos = <?php echo json_encode($generos); ?>;
+var ocupaciones = <?php echo json_encode($ocupaciones); ?>;
+var situacionesocupacionales = <?php echo json_encode($situacionesocupacionales); ?>;
+
 
 document.getElementById("btn_accordion").addEventListener("click", function(event){
   event.preventDefault();
@@ -351,7 +356,15 @@ function crearAcordeon(){
     //Vinculo 
     acordion = acordion + '<div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">';
     acordion = acordion + '<div class="form-group">' + '<label for="casa">Vinculo</label>';
-    acordion = acordion + '<input type="text" id="vinculo' + incrementador + '" class="form-control" placeholder="Ingrese vinculo">' + '</div>' + '</div>';
+
+    acordion = acordion +  '<select  class="form-control" id="vinculo' + incrementador + '"><option selected disabled>Seleccione...</option>';
+
+
+    for(i=0; i<vinculos.length; i++){
+        acordion = acordion + '<option value="'+ vinculos[i].idVinculo +'">' + vinculos[i].nombre + '</option>';
+    }
+    acordion = acordion + '</select></div></div>';
+
 
     //Nombres
     acordion = acordion + '<div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">';
@@ -363,10 +376,20 @@ function crearAcordeon(){
     acordion = acordion + '<div class="form-group">' + '<label for="apellidos">Apellidos</label>';
     acordion = acordion + '<input type="text" id="apellidos' + incrementador + '" class="form-control" placeholder="Ingrese apellidos">' + '</div>' + '</div>';
 
+    //Generos
+
+
     acordion = acordion + '<div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">';
-    acordion = acordion + '<div class="form-group">' + '<label for="genero">Genero</label>';
-    acordion = acordion + '<input type="text" id="genero' + incrementador + '" class="form-control" placeholder="Ingrese genero">' + '</div>' + '</div>';
-    
+    acordion = acordion + '<div class="form-group">' + '<label for="casa">Sexo</label>';
+
+    acordion = acordion +  '<select  class="form-control" id="genero' + incrementador + '"><option selected disabled>Seleccione...</option>';
+
+
+    for(i=0; i<generos.length; i++){
+        acordion = acordion + '<option value="'+ generos[i].idGenero +'">' + generos[i].nombre + '</option>';
+    }
+    acordion = acordion + '</select></div></div>';
+
     
     //Fecha Nacimiento
     acordion = acordion + '<div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">';
@@ -422,23 +445,51 @@ function crearAcordeon(){
 }
 
 function agregar(inc){
-    console.log(inc);
-    vinculo = $("#vinculo" + inc).val();
+    selectVinculo = document.getElementById("vinculo"+ inc);
+    selectGenero = document.getElementById("genero"+ inc);
+
+    vinculo = selectVinculo.value;
+    textoVinculo = selectVinculo.options[selectVinculo.selectedIndex].text;
+
+    genero = selectGenero.value;
+    textoGenero = selectGenero.options[selectGenero.selectedIndex].text;
+
     nombres = $("#nombres" + inc).val();
     apellidos = $("#apellidos" + inc).val();
-    genero = $("#genero" + inc).val();
     dni = $("#dni" + inc).val();
     fechaNac = $("#fechaNac" + inc).val();
 
-    console.log('Genero', genero);
+    //Edad
+    const fechaActual = new Date();
+    const anoActual = parseInt(fechaActual.getFullYear());
+    const mesActual = parseInt(fechaActual.getMonth()) + 1;
+    const diaActual = parseInt(fechaActual.getDate());
 
-    if (vinculo != "" && nombres != "" && apellidos != "" && dni != "" && fechaNac != "" && genero != ""){
+    // 2016-07-11
+    const anoNacimiento = parseInt(String(fechaNac).substring(0, 4));
+    console.log(anoNacimiento);
+
+    const mesNacimiento = parseInt(String(fechaNac).substring(5, 7));
+    const diaNacimiento = parseInt(String(fechaNac).substring(8, 10));
+
+    let edad = anoActual - anoNacimiento;
+    if (mesActual < mesNacimiento) {
+        edad--;
+    } else if (mesActual === mesNacimiento) {
+        if (diaActual < diaNacimiento) {
+            edad--;
+        }
+    }
+
+    console.log(edad);
+
+    if (selectVinculo.selectedIndex != 0 && nombres != "" && apellidos != "" && dni != "" && fechaNac != "" && selectGenero.selectedIndex != 0){
                 var fila = '<tr>';
                 fila = fila + '<td>' + '<input type="hidden" name="grupos[]" value="'+inc+'">'+'</td>';
-                fila = fila + '<td><input type="hidden" name="vinculos[]" value="' + vinculo + '">' + vinculo + '</td>' ;
+                fila = fila + '<td><input type="hidden" name="vinculos[]" value="' + vinculo + '">' + textoVinculo + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="nombres[]" value="' + nombres + '">' + nombres + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="apellidos[]" value="' + apellidos + '">' + apellidos + '</td>' ;
-                fila = fila + '<td><input type="hidden" name="generos[]" value="' + genero + '">' + genero + '</td>' ;
+                fila = fila + '<td><input type="hidden" name="generos[]" value="' + genero + '">' + textoGenero + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="fechaNac[]" value="' + fechaNac + '" class="fechaNac">' + fechaNac + '</td>' ;
                 fila = fila + '<td><input type="hidden" name="dni[]" value="' + dni + '">' + dni + '</td>' ;
                 fila = fila + '<td>' + '<button class="form-control" data-toggle="modal" data-target="#detallePersona'+persona+'" onClick="event.preventDefault()">'+ 'Detalle' + '</button>' + '</td>' ;
@@ -452,7 +503,7 @@ function agregar(inc){
                 modal = modal +   '<div class="modal-dialog">'
                 modal = modal +     '<div class="modal-content">'
 
-                modal = modal + '<div class="modal-header"><h5 class="modal-title" id="staticBackdropLabel">Detalle</h5>'
+                modal = modal + '<div class="modal-header"><h5 class="modal-title" id="staticBackdropLabel">Detalles de: '+nombres+' ' +apellidos+' </h5>'
                 modal = modal + '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
                 modal = modal + '</div>'
 
@@ -468,18 +519,20 @@ function agregar(inc){
                 modal = modal +  '<h3>Datos Medicos de la Persona</h3>'
 
                 //Embarazo
-                if(genero == 'Femenino'){
-                  modal = modal + '<label for="">Embarazada</label><br><label for="">Si</label><input type="radio" name="embarazada[]" id="siembarazada'+persona+'" value="Si" onclick="mesesEmb('+persona+', this.id)"><br><label for="">No </label><input type="radio" name="embarazada[]" id="noembarazada'+persona+'" value="No" onclick="mesesEmb('+persona+', this.id)" checked>';
+                if(textoGenero == 'Femenino'){
+                  modal = modal + '<label for="">Embarazada</label><br><label for="">Si</label><input type="radio" name="embarazada'+persona+'[]" id="siembarazada'+persona+'" value="Si" onclick="mesesEmb('+persona+', this.id)"><br><label for="">No </label><input type="radio" name="embarazada'+persona+'[]" id="noembarazada'+persona+'" value="No" onclick="mesesEmb('+persona+', this.id)" checked>';
   
                   //Meses Embarazo
-                  modal = modal +  '<div class="form-group" style="display:none" id="mesesembarazo'+persona+'"><label for="">Meses de Embarazo</label><input type="text" class="form-control" name="mesesemb[]" placeholder=""></div>';
+                  modal = modal +  '<div class="form-group" style="display:none" id="mesesembarazo'+persona+'"><label for="">Meses de Embarazo</label><input type="text" class="form-control" name="mesesemb[]" placeholder=""></div>'; 
+                } else {
+                  modal = modal + '<input type="text" class="form-control" name="mesesemb[]" value="No" style="display:none">';
                 }
 
                 //Patologia
-                modal = modal + '<div class="form-group"><label for="">Patologia</label><br><label for="">Si</label><input type="radio" name="patologia[]" id="sipatologia'+persona+'" value="Si" onclick="patologiaPersona('+persona+', this.id)"><br><label for="">No </label><input type="radio" name="patologia[]" id="nopatologia'+persona+'" value="No" onclick="patologiaPersona('+persona+', this.id)" checked></div>';
+                modal = modal + '<div class="form-group"><label for="">Patologia</label><br><label for="">Si</label><input type="radio" name="patologia'+persona+'[]" id="sipatologia'+persona+'" value="Si" onclick="patologiaPersona('+persona+', this.id)"><br><label for="">No </label><input type="radio" name="patologia'+persona+'[]" id="nopatologia'+persona+'" value="No" onclick="patologiaPersona('+persona+', this.id)" checked></div>';
 
                 //Select Patologia
-                modal = modal +  '<div class="form-group" style="display:none" id="patologias'+persona+'"><select class="form-control" name="patologias[]" id=""><option selected disabled>Seleccione...</option>';
+                modal = modal +  '<div class="form-group" style="display:none" id="patologias'+persona+'"><select class="form-control" name="patologias[]" id=""><option selected  value="No">Seleccione...</option>';
                 
                 for(i=0; i<patologias.length; i++){
                     modal = modal + '<option value="'+ patologias[i].idPatologia +'">' + patologias[i].nombre + '</option>';
@@ -493,35 +546,61 @@ function agregar(inc){
                 modal = modal +  '<h3>Datos Escolares</h3>'
 
                 //Escolaridad
-                modal = modal + '<div class="form-group"><label for="">Escolaridad</label><br><label for="">Si</label><input type="radio" name="escolaridad[]" id="siescolaridad'+persona+'" value="Si" onclick="escolaridadPersona('+persona+', this.id)"><br><label for="">No </label><input type="radio" name="escolaridad[]" id="noescolaridad'+persona+'" value="No" onclick="escolaridadPersona('+persona+', this.id)" checked></div>';
+                modal = modal + '<div class="form-group"><label for="">Escolaridad</label><br><label for="">Si</label><input type="radio" name="escolaridad'+persona+'[]" id="siescolaridad'+persona+'" value="Si" onclick="escolaridadPersona('+persona+', this.id)"><br><label for="">No </label><input type="radio" name="escolaridad'+persona+'[]" id="noescolaridad'+persona+'" value="No" onclick="escolaridadPersona('+persona+', this.id)" checked></div>';
 
                 //Select Nivel
-                modal = modal +  '<div class="form-group" style="display:none" id="nivel'+persona+'"><label for="">Nivel de Estudio</label><select class="form-control" name="niveles[]" id=""><option selected disabled>Seleccione...</option>';
+                modal = modal +  '<div class="form-group" style="display:none" id="nivel'+persona+'"><label for="">Nivel de Estudio</label><select class="form-control" name="niveles[]" id=""><option selected value="No">Seleccione...</option>';
 
-                for(i=0; i<niveles.length; i++){
-                    modal = modal + '<option value="'+ niveles[i].idNivel +'">' + niveles[i].nombre + '</option>';
+                if(niveles.length != 0){
+                  for(i=0; i<niveles.length; i++){
+                      modal = modal + '<option value="'+ niveles[i].idNivel +'">' + niveles[i].nombre + '</option>';
+                  }
                 }
 
                 modal = modal + '</select></div>';
                 
-                //Datos de trabajo
-                //Ocupacion
-                modal = modal +  '<h3>Datos de Trabajo</h3>'
-                modal = modal +  '<div class="form-group"><label for="">Ocupación</label><select class="form-control" name="ocupacion[]" id=""><option selected disabled>Seleccione...</option><option value="Obrero">Obrero</option><option value="Panadero">Panadero</option></select></div>'   
-               
-                //Trabajo Registrado
-                modal = modal +   '<div class="form-group">'
-                modal = modal +   '<label for="">Trabajo Registrado</label><select class="form-control" name="trabajoreg[]" id=""><option selected disabled>Seleccione...</option><option>Trabajador en Relación de Dependencia</option><option>Autónomo-Responsable Inscripto</option><option>Monotributista</option></select>'
-                modal = modal +   '</div>'
+                if(edad > 16){
+                  //Datos de trabajo
+                  //Ocupacion
+                  modal = modal +  '<h3>Datos de Trabajo</h3>'
+                  
 
-                modal = modal +   '<div class="form-group">'
-                modal = modal +   '<label for="">Ingreso</label><input type="text" class="form-control" name="" id="" aria-describedby="emailHelpId" placeholder=""></div>'
-                modal = modal +   '</div>'
+                  modal = modal +  '<div class="form-group"><label for="">Ocupación</label><select class="form-control" name="ocupaciones[]" id=""><option selected value="No">Seleccione...</option>';
                 
+                  for(i=0; i<ocupaciones.length; i++){
+                      modal = modal + '<option value="'+ ocupaciones[i].idOcupacion +'">' + ocupaciones[i].nombre + '</option>';
+                  }
+                  modal = modal + '</select></div>';
+                 
+                  //Trabajo Registrado
+                  modal = modal +  '<div class="form-group"><label for="">Trabajo Registrado</label><select class="form-control" name="situacionesocupacionales[]" id=""><option selected value="No">Seleccione...</option>';
+                
+                  for(i=0; i<situacionesocupacionales.length; i++){
+                      modal = modal + '<option value="'+ situacionesocupacionales[i].idsituacionesOcupacionales +'">' + situacionesocupacionales[i].nombre + '</option>';
+                  }
+                  modal = modal + '</select></div>';
+  
+                  modal = modal +   '<div class="form-group">'
+                  modal = modal +   '<label for="">Ingreso</label><input type="text" class="form-control" name="ingresos[]" id="" placeholder="Ingrese el ingreso"></div>'
+                  modal = modal +   '</div>'
+              
+                } else {
+
+                  modal = modal + '<select class="form-control" name="trabajoreg[]" style="display:none"><option selected value="No">Seleccione...</option></select>';
+
+                  modal = modal + '<input type="text" class="form-control" name="ingresos[]" style="display:none">';
+
+                  modal = modal + '<input type="text" class="form-control" name="ocupaciones[]" style="display:none">';
+
+                  modal = modal + '<input type="text" class="form-control" name="situacionesocupacionales[]" style="display:none">';
+                }
+
+                
+
                 //Botones Modal
                 modal = modal + '<div class="modal-footer">'
-                modal = modal + '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>'
-                modal = modal + '<button type="button" class="btn btn-primary">Guardar</button>'
+                
+                modal = modal + '<button type="button" class="btn btn-primary" data-dismiss="modal">Guardar</button>'
                 modal = modal + '</div>'
                 modal = modal + '</div>'
                 modal = modal + '</div>'
@@ -593,10 +672,10 @@ if (id != null && id.includes('siescolaridad') && $nivel != null){
 
 
 function limpiar(inc){
-    $("#vinculo" + inc).val("");
+    document.getElementById("vinculo" + inc).selectedIndex = 0;
+    document.getElementById("genero" + inc).selectedIndex = 0;
     $("#nombres" + inc).val("");
     $("#apellidos" + inc).val("");
-    $("#genero" + inc).val("");
     $("#fechaNac" + inc).val("");
     $("#dni" + inc).val("");
 }

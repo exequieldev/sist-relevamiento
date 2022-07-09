@@ -14,7 +14,12 @@ use App\Http\Controllers\DetalleConstruccionController;
 use App\Http\Controllers\RelevamientoController;
 use App\Http\Controllers\HabitacionController;
 use App\Http\Controllers\DetalleHabitacionController;
-
+use App\Http\Controllers\VinculoController;
+use App\Http\Controllers\GeneroController;
+use App\Http\Controllers\OcupacionController;
+use App\Http\Controllers\SituacionOcupacionalController;
+use App\Http\Controllers\PatologiaController;
+use App\Http\Controllers\NivelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,5 +45,10 @@ Route::resource('/barrio',BarrioController::class);
 Route::resource('/construccion',ConstruccionController::class);
 Route::resource('/detalleconstruccion',DetalleConstruccionController::class);
 Route::resource('/relevamiento',RelevamientoController::class);
-Route::resource('/habitacion',HabitacionController::class);
 Route::resource('/detallehabitacion',DetalleHabitacionController::class);
+Route::resource('/vinculo', VinculoController::class);
+Route::resource('/genero', GeneroController::class);
+Route::resource('/ocupacion', OcupacionController::class);
+Route::resource('/situacionocupacional', SituacionOcupacionalController::class);
+Route::resource('/patologia', PatologiaController::class);
+Route::resource('/nivel', NivelController::class);

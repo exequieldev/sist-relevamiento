@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Nivel extends Model
+class SituacionOcupacional extends Model
 {
     use HasFactory;
 
-    protected $table = "niveles";
+    protected $table = "situacionesocupacionales";
 
-    protected $primaryKey = "idNivel";
+    protected $primaryKey = "idsituacionesOcupacionales";
 
     protected $fillable = ['nombre','estado'];
 

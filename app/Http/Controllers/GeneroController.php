@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Genero;
 
 class GeneroController extends Controller
 {
@@ -13,7 +14,9 @@ class GeneroController extends Controller
      */
     public function index()
     {
-        //
+        $generos = Genero::orderBy('idGenero','desc')->where('estado',1)->paginate(5);
+
+        return view('genero.index', ['generos'=>$generos]);
     }
 
     /**
@@ -23,7 +26,7 @@ class GeneroController extends Controller
      */
     public function create()
     {
-        //
+        return view('genero.create');
     }
 
     /**
@@ -34,7 +37,12 @@ class GeneroController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $genero = new Genero;
+        $genero->nombre = $request->get('nombre');
+        $genero->estado = 1;
+        $genero->save();
+
+        return redirect()->route('genero.index');
     }
 
     /**
@@ -56,7 +64,9 @@ class GeneroController extends Controller
      */
     public function edit($id)
     {
-        //
+        $genero = Genero::findOrFail($id);
+
+        return view('genero.edit',['genero'=>$genero]);
     }
 
     /**
@@ -68,7 +78,11 @@ class GeneroController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $genero = Genero::findOrFail($id);
+        $genero->nombre = $request->get('nombre');
+        $genero->update();
+
+        return redirect()->route('genero.index');
     }
 
     /**
@@ -79,6 +93,10 @@ class GeneroController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $genero = Genero::findOrFail($id);
+        $genero->estado=0;
+        $genero->update();
+
+        return redirect()->route('genero.index');
     }
 }

@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Vinculo extends Model
 {
     use HasFactory;
+
+    protected $table = "vinculos";
+
+    protected $primaryKey = "idVinculo";
+
+    protected $fillable = ['nombre','estado'];
+
+    public $timestamps=false;
+
+    protected $guarded = [];
+
+    
 }

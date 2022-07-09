@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Vinculo;
 
 class VinculoController extends Controller
 {
@@ -13,7 +14,9 @@ class VinculoController extends Controller
      */
     public function index()
     {
-        //
+        $vinculos = Vinculo::orderBy('idVinculo','desc')->where('estado',1)->paginate(5);
+
+        return view('vinculo.index', ['vinculos'=>$vinculos]);
     }
 
     /**
@@ -23,7 +26,7 @@ class VinculoController extends Controller
      */
     public function create()
     {
-        //
+        return view('vinculo.create');
     }
 
     /**
@@ -34,7 +37,12 @@ class VinculoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $vinculo = new Vinculo;
+        $vinculo->nombre = $request->get('nombre');
+        $vinculo->estado = 1;
+        $vinculo->save();
+
+        return redirect()->route('vinculo.index');
     }
 
     /**
@@ -56,7 +64,9 @@ class VinculoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $vinculo = Vinculo::findOrFail($id);
+
+        return view('vinculo.edit',['vinculo'=>$vinculo]);
     }
 
     /**
@@ -68,7 +78,11 @@ class VinculoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $vinculo = Vinculo::findOrFail($id);
+        $vinculo->nombre = $request->get('nombre');
+        $vinculo->update();
+
+        return redirect()->route('vinculo.index');
     }
 
     /**
@@ -79,6 +93,10 @@ class VinculoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $vinculo = Vinculo::findOrFail($id);
+        $vinculo->estado=0;
+        $vinculo->update();
+
+        return redirect()->route('vinculo.index');
     }
 }

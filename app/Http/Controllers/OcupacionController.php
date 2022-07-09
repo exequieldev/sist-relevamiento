@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Ocupacion;
 
 class OcupacionController extends Controller
 {
@@ -13,7 +14,9 @@ class OcupacionController extends Controller
      */
     public function index()
     {
-        //
+        $ocupaciones = Ocupacion::orderBy('idOcupacion','desc')->where('estado',1)->paginate(5);
+
+        return view('ocupacion.index', ['ocupaciones'=>$ocupaciones]);
     }
 
     /**
@@ -23,7 +26,7 @@ class OcupacionController extends Controller
      */
     public function create()
     {
-        //
+        return view('ocupacion.create');
     }
 
     /**
@@ -34,7 +37,12 @@ class OcupacionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $ocupacion = new Ocupacion;
+        $ocupacion->nombre = $request->get('nombre');
+        $ocupacion->estado = 1;
+        $ocupacion->save();
+
+        return redirect()->route('ocupacion.index');
     }
 
     /**
@@ -56,7 +64,9 @@ class OcupacionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $ocupacion = Ocupacion::findOrFail($id);
+
+        return view('ocupacion.edit',['ocupacion'=>$ocupacion]);
     }
 
     /**
@@ -68,7 +78,11 @@ class OcupacionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $ocupacion = Ocupacion::findOrFail($id);
+        $ocupacion->nombre = $request->get('nombre');
+        $ocupacion->update();
+
+        return redirect()->route('ocupacion.index');
     }
 
     /**
@@ -79,6 +93,10 @@ class OcupacionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $ocupacion = Ocupacion::findOrFail($id);
+        $ocupacion->estado=0;
+        $ocupacion->update();
+
+        return redirect()->route('ocupacion.index');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Patologia;
 
 class PatologiaController extends Controller
 {
@@ -13,7 +14,9 @@ class PatologiaController extends Controller
      */
     public function index()
     {
-        //
+        $patologias = Patologia::orderBy('idPatologia','desc')->where('estado',1)->paginate(5);
+
+        return view('patologia.index', ['patologias'=>$patologias]);
     }
 
     /**
@@ -23,7 +26,7 @@ class PatologiaController extends Controller
      */
     public function create()
     {
-        //
+        return view('patologia.create');
     }
 
     /**
@@ -34,7 +37,12 @@ class PatologiaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $patologia = new Patologia;
+        $patologia->nombre = $request->get('nombre');
+        $patologia->estado = 1;
+        $patologia->save();
+
+        return redirect()->route('patologia.index');
     }
 
     /**
@@ -56,7 +64,9 @@ class PatologiaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $patologia = Patologia::findOrFail($id);
+
+        return view('patologia.edit',['patologia'=>$patologia]);
     }
 
     /**
@@ -68,7 +78,11 @@ class PatologiaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $patologia = Patologia::findOrFail($id);
+        $patologia->nombre = $request->get('nombre');
+        $patologia->update();
+
+        return redirect()->route('patologia.index');
     }
 
     /**
@@ -79,6 +93,10 @@ class PatologiaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $patologia = Patologia::findOrFail($id);
+        $patologia->estado=0;
+        $patologia->update();
+
+        return redirect()->route('patologia.index');
     }
 }

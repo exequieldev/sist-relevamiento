@@ -19,6 +19,10 @@ use App\Models\DetalleConstruccion;
 use App\Models\Construccion;
 use App\Models\Habitacion;
 use App\Models\DetalleHabitacion;
+use App\Models\Embarazo;
+use App\Models\Patologia;
+use App\Models\Ingreso;
+use App\Models\Discapacidad;
 
 use Illuminate\Http\Request;
 
@@ -87,8 +91,13 @@ class RelevamientoController extends Controller
         $lotes = Lote::all();
         $detalleConstrucciones = DetalleConstruccion::all();
         $detalleHabitaciones = DetalleHabitacion::all();
-        $niveles = DB::table('niveles')->get()->toArray();
-        $patologias = DB::table('patologias')->get()->toArray();
+        $niveles = DB::table('niveles')->where('estado', 1)->get()->toArray();
+        $patologias = DB::table('patologias')->where('estado', 1)->get()->toArray();
+        $vinculos = DB::table('vinculos')->where('estado', 1)->get()->toArray();
+        $generos = DB::table('generos')->where('estado', 1)->get()->toArray();
+        $ocupaciones = DB::table('ocupaciones')->where('estado', 1)->get()->toArray();
+        $situacionesocupacionales = DB::table('situacionesocupacionales')->where('estado', 1)->get()->toArray();
+
         $habitaciones = Habitacion::where('estado', 1)
         ->whereIn('idHabitacion', DetalleHabitacion::select('idHabitacion'))          //Para controlar que no devuelva una habitacion sin detalles de habitacion registrados.
         ->get();
@@ -98,7 +107,7 @@ class RelevamientoController extends Controller
         ->get();
         
         //dd($construcciones);
-        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones', 'niveles', 'patologias'));
+        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones', 'niveles', 'patologias', 'vinculos', 'generos', 'ocupaciones', 'situacionesocupacionales'));
     }
 
     /**
@@ -137,6 +146,7 @@ class RelevamientoController extends Controller
             ->where('casas.numeroCasa','=',$request->casa)
             ->select('casas.numeroCasa as nombre','lotes.idLote as Lote','casas.idCasa','casas.division')
             ->first();
+
             
             if(!empty($buscarCasa)){
                 
@@ -182,12 +192,13 @@ class RelevamientoController extends Controller
                 $casa->save();
             }
 
-        
-        
-        $telefono = new Telefono;
-        $telefono->numero = $request->input('telefono');
-        $telefono->idCasa = $casa->idCasa;
-        $telefono->save();
+        if($request->input('telefono') != null){
+            $telefono = new Telefono;
+            $telefono->numero = $request->input('telefono');
+            $telefono->idCasa = $casa->idCasa;
+            $telefono->save();            
+        }
+
 
         $grupos = $request->get('grupos');
         $vinculos = $request->get('vinculos');
@@ -246,43 +257,93 @@ class RelevamientoController extends Controller
         //dd($casaHabitacion);
         //dd($vinculos);                     //Obtenemos el num del último grupo registrado.
 
-
-        $embarazo = $request->get('embarazada');
-        $mesesembarazo = $request->get('mesesemb');
-        $patologia = $request->get('patologia');
+        $embarazos = $request->get('embarazada');
+        $mesesEmbarazo = $request->get('mesesemb');
+        $patologias = $request->get('patologia');
         $patologiapersona = $request->get('patologias');
         $escolaridad = $request->get('escolaridad');
         $niveles = $request->get('niveles');
-        $ocupacion = $request->get('ocupacion');
-        
+        $vinculos = $request->get('vinculos');
+        $generos = $request->get('generos');
+        $ocupaciones = $request->get('ocupaciones');
+        $situacionesocupacionales = $request->get('situacionesocupacionales');
+        $ingresos = $request->get('ingresos');
 
-        dd($embarazo, $mesesembarazo, $patologia, $patologiapersona, $escolaridad, $niveles, $ocupacion);
-
+        //dd($embarazos, $mesesEmbarazo, $patologias, $patologiapersona, $escolaridad, $niveles, $vinculos, $generos, $ocupaciones, $situacionesocupacionales, $ingresos, $niveles[0]);
+       
         $indice = 1;
+        //dd($grupos);
         if(!empty($grupos)){
             for ($j=0; $j < $grupos[array_key_last($grupos)]; $j++){
                 
                 $grupo = new Hogar;
                 $grupo->idCasa = $casa->idCasa;
                 $grupo->save();
-                
+                //dd($grupo->idCasa);
+                //dd($nombres, $apellidos, $dni, $grupo);
                 for ($i=0; $i < count($grupos); $i++) {
                     if ($grupos[$i] == $indice){
                         $persona = new Persona;
-                        $persona->vinculo = $vinculos[$i];
+                        //dd($vinculos, $generos);
+                        $persona->idVinculo = $vinculos[$i];
+                        $persona->idGenero = $generos[$i];
                         $persona->nombres = $nombres[$i];
                         $persona->apellidos = $apellidos[$i];
                         $persona->fechaNacimiento = $fechaNac[$i];
                         $persona->dni = $dni[$i];   
-                        $persona->ocupacion = $ocupacion[$i];
                         $persona->idhogar = $grupo->idhogar;
-                        $persona->save();
+                        
+                        
+                        if($request->get('escolaridad' . strval($i+1))[0] != "No" && $niveles[$i] != null && $niveles[$i] != "No"){
+                            $persona->idNivel = $niveles[$i];
+                        }
+                        
+                        //dd($situacionesocupacionales[$i]);
+                        if($situacionesocupacionales[$i] != null && $situacionesocupacionales[$i] != "No"){
+                            $persona->idsituacionesOcupacionales = $situacionesocupacionales[$i];
+                        }
+                  
+                        $persona->save();                                                
+                        
+                        if($mesesEmbarazo[$i] != 'No'){
+                            if($request->get('embarazada' . strval($i+1))[0] === "Si"){
+                                $embarazo = new Embarazo;
+                                if($mesesEmbarazo[$i] != null){
+                                    $embarazo->mesesEmbarazo = $mesesEmbarazo[$i];
+                                }
+                                $embarazo->idPersona = $persona->idPersona; 
+                                $embarazo->save();
+                            }
+                        }
+                        
+                        
+                        if($request->get('patologia' . strval($i+1))[0] === "Si" && $patologiapersona[$i] != null){
+                            
+                            $discapacidad = new Discapacidad;
+                            $discapacidad->idPersona = $persona->idPersona;
+                            $discapacidad->idPatologia = $patologiapersona[$i];
+                            $discapacidad->save();
+                        }
+                        
+                        //dd($ingresos);
+                        if($ocupaciones[$i] != null && $ocupaciones[$i] != "No"){
+                            $ingreso = new Ingreso;
+                            $ingreso->idPersona = $persona->idPersona;
+                            $ingreso->idOcupacion = $ocupaciones[$i]; 
+                            
+                            if($ingresos[$i] != null){
+                                $ingreso->monto = $ingresos[$i];
+                            }
+                            $ingreso->save();
+                        } 
                     }
                 }
-                $indice++;  
+               
+               $indice++;  
             }
         }
-        
+        //dd("hola");
+
         //Se cambio a esta posición porque innecesariamente asociaba el relevamiento n veces a la misma casa según cuantos grupos pertenecian a la casa.        
         $relevamiento = new Relevamiento;
         $relevamiento->fechaDesde = '2022-06-08';
@@ -293,7 +354,8 @@ class RelevamientoController extends Controller
         return redirect()->route('relevamiento.index');
     }catch (\Exception $e) {
         DB::rollBack();
-        return response()->json(['message' => 'Error']);
+        //return response()->json(['message' => 'Error']);
+        return response();
     }
 }
 
@@ -358,9 +420,10 @@ class RelevamientoController extends Controller
             $personas = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
             ->join('hogares','hogares.idCasa', '=', 'casas.idCasa')
             ->join('personas','hogares.idhogar', '=', 'personas.idhogar')
+            ->join('vinculos', 'personas.idVinculo', '=', 'vinculos.idVinculo')
             ->where('relevamientos.estado', 1)
             ->where('casas.numeroCasa', $casa->numeroCasa)
-            ->select('personas.nombres as nombres', 'personas.apellidos as apellidos', 'personas.dni as dni', 'personas.fechaNacimiento as fechanac', 'personas.idhogar as hogar', 'personas.vinculo as vinculo', 'casas.division as division')
+            ->select('personas.nombres as nombres', 'personas.apellidos as apellidos', 'personas.dni as dni', 'personas.fechaNacimiento as fechanac', 'personas.idhogar as hogar', 'vinculos.nombre as vinculo', 'casas.division as division')
             ->get();
             //dd($personas);
 
@@ -425,7 +488,8 @@ class RelevamientoController extends Controller
         $personas = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
         ->join('hogares','casas.idCasa','=','hogares.idCasa')
         ->join('personas','hogares.idhogar','=','personas.idhogar')
-        ->select('personas.vinculo', 'personas.nombres', 'personas.apellidos', 'personas.dni', 'personas.fechaNacimiento', 'hogares.idhogar', 'personas.idPersona')
+        ->join('vinculos', 'personas.idVinculo', '=', 'vinculos.idVinculo') 
+        ->select('vinculos.nombre as vinculo', 'personas.nombres', 'personas.apellidos', 'personas.dni', 'personas.fechaNacimiento', 'hogares.idhogar', 'personas.idPersona')
         ->where('idRelevamiento', $id)
         ->get();
 

@@ -276,6 +276,39 @@ return [
             'url'  => '/habitacion',
             'icon' => 'fas fa-door-open',
         ],
+        [
+            'text' => 'Vinculos',
+            'url'  => '/vinculo',
+            'icon' => 'fa fa-link',
+        ],
+        [
+            'text' => 'Generos',
+            'url'  => '/genero',
+            'icon' => 'fas fa-venus-mars',
+        ],
+        [
+            'text' => 'Ocupaciones',
+            'url'  => '/ocupacion',
+            'icon' => 'fa fa-briefcase',
+        ],
+        [
+            'text' => 'Situaciones Ocupacionales',
+            'url'  => '/situacionocupacional',
+            'icon' => '	fas fa-handshake',
+        ],
+        [
+            'text' => 'Patologias',
+            'url'  => '/patologia',
+            'icon' => '	fas fa-blind',
+        ],
+        [
+            'text' => 'Niveles Educativos',
+            'url'  => '/nivel',
+            'icon' => 'fas fa-graduation-cap',
+        ],
+
+
+        
         // [
         //     'text' => 'profile',
         //     'url'  => 'admin/settings',

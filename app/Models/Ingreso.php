@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Ingreso extends Model
 {
     use HasFactory;
+
+    protected $table = "ingresos";
+
+    protected $primaryKey = "idIngreso";
+
+    protected $fillable = ['monto','idPersona', 'idOcupacion'];
+
+    public $timestamps=false;
+
+    protected $guarded = [];
 }
