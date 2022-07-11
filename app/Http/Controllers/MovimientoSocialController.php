@@ -13,7 +13,8 @@ class MovimientoSocialController extends Controller
      */
     public function index()
     {
-        //
+        $movimientos=MovimientoSocial::orderBy('idBarrio','desc')->where('estado',1)->paginate(5);
+        return view('barrio.index', ['barrios'=>$barrios]);
     }
 
     /**

@@ -20,6 +20,7 @@ use App\Http\Controllers\OcupacionController;
 use App\Http\Controllers\SituacionOcupacionalController;
 use App\Http\Controllers\PatologiaController;
 use App\Http\Controllers\NivelController;
+use App\Http\Controllers\MovimientoSocialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,3 +53,4 @@ Route::resource('/ocupacion', OcupacionController::class);
 Route::resource('/situacionocupacional', SituacionOcupacionalController::class);
 Route::resource('/patologia', PatologiaController::class);
 Route::resource('/nivel', NivelController::class);
+Route::resource('/movimientosocial',MovimientoSocialController::class);
