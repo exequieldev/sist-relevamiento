@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\MovimientoSocial;
 
 class MovimientoSocialController extends Controller
 {
@@ -13,8 +14,8 @@ class MovimientoSocialController extends Controller
      */
     public function index()
     {
-        $movimientos=MovimientoSocial::orderBy('idBarrio','desc')->where('estado',1)->paginate(5);
-        return view('barrio.index', ['barrios'=>$barrios]);
+        $movimientos=MovimientoSocial::orderBy('idMovimientoSocial','desc')->where('estado',1)->paginate(5);
+        return view('movimiento.index', ['movimientos'=>$movimientos]);
     }
 
     /**
@@ -24,7 +25,7 @@ class MovimientoSocialController extends Controller
      */
     public function create()
     {
-        //
+        return view('movimiento.create');
     }
 
     /**
@@ -35,7 +36,21 @@ class MovimientoSocialController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|unique:movimientosociales'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre del Mivimiento, no se admiten campos vacios.',
+            'nombre.unique' => 'El Movimiento que intenta ingresar ya existe.'
+        ]
+    
+        );
+        $movimiento = new MovimientoSocial;
+        $movimiento->nombre = $request->get('nombre');
+        $movimiento->estado = 1;
+        $movimiento->save();
+        
+        return redirect()->route('movimiento.index');
     }
 
     /**
@@ -57,7 +72,9 @@ class MovimientoSocialController extends Controller
      */
     public function edit($id)
     {
-        //
+        $movimiento = MovimientoSocial::findOrFail($id);
+
+        return view('movimiento.edit',['movimiento'=>$movimiento]);
     }
 
     /**
@@ -69,7 +86,19 @@ class MovimientoSocialController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nombre' => 'required'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre del Movimiento, no se admiten campos vacios.',
+        ]
+        );
+
+        $movimiento = MovimientoSocial::findOrFail($id);
+        $movimiento->nombre = $request->get('nombre');
+        $movimiento->update();
+
+        return redirect()->route('movimiento.index');
     }
 
     /**
@@ -80,6 +109,12 @@ class MovimientoSocialController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $movimiento = MovimientoSocial::findOrFail($id);
+        $movimiento->estado=0;
+        $movimiento->update();
+        
+
+
+        return redirect()->route('movimiento.index');
     }
 }

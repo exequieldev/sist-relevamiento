@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Categoria;
+use App\Models\InstitucionMedica;
 
 class CategoriaController extends Controller
 {
@@ -13,7 +15,8 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        //
+        $categorias=Categoria::orderBy('idCategoria','desc')->where('estado',1)->paginate(5);
+        return view('categoria.index', ['categorias'=>$categorias]);
     }
 
     /**
@@ -23,7 +26,7 @@ class CategoriaController extends Controller
      */
     public function create()
     {
-        //
+        return view('categoria.create');
     }
 
     /**
@@ -34,7 +37,22 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|unique:categorias'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de la Categoria, no se admiten campos vacios.',
+            'nombre.unique' => 'La categoria que intenta ingresar ya existe.'
+        ]
+    
+        );
+
+        $categoria = new categoria;
+        $categoria->nombre = $request->get('nombre');
+        $categoria->estado = 1;
+        $categoria->save();
+
+        return redirect()->route('categoria.index');
     }
 
     /**
@@ -45,7 +63,14 @@ class CategoriaController extends Controller
      */
     public function show($id)
     {
-        //
+        $categoria = Categoria::findOrfail($id);
+        $institucionMedica =InstitucionMedica::orderBy('idInstitucionMedica','desc')
+        ->where('idCategoria', $id)
+        ->where('estado',1)
+        ->paginate(5);
+
+        return view('categoria.show',['institucionMedica'=>$institucionMedica, 'idCategoria' => $id,
+        'nombre' => $categoria->nombre]);
     }
 
     /**
@@ -56,7 +81,9 @@ class CategoriaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categoria = Categoria::findOrFail($id);
+
+        return view('categoria.edit',['categoria'=>$categoria]);
     }
 
     /**
@@ -68,7 +95,19 @@ class CategoriaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nombre' => 'required'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de la Categoria, no se admiten campos vacios.',
+        ]
+        );
+
+        $categoria = Categoria::findOrFail($id);
+        $categoria->nombre = $request->get('nombre');
+        $categoria->update();
+
+        return redirect()->route('categoria.index');
     }
 
     /**
@@ -79,6 +118,12 @@ class CategoriaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $categoria = Categoria::findOrFail($id);
+        $categoria->estado=0;
+        $categoria->update();
+        
+
+
+        return redirect()->route('categoria.index');
     }
 }

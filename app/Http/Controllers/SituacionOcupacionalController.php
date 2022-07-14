@@ -14,7 +14,7 @@ class SituacionOcupacionalController extends Controller
      */
     public function index()
     {
-        $situacionesocupacionales = SituacionOcupacional::orderBy('idsituacionesOcupacionales','desc')->where('estado',1)->paginate(5);
+        $situacionesocupacionales = SituacionOcupacional::orderBy('idsituacionOcupacional','desc')->where('estado',1)->paginate(5);
 
         return view('situacionocupacional.index', ['situacionesocupacionales'=>$situacionesocupacionales]);
     }

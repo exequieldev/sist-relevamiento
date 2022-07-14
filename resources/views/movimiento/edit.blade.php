@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sd-6 col-xs-12">
-        <h3>Editar Situación Ocupacional</h3>
+        <h3>Editar Movimiento Social</h3>
         @if(count($errors)>0)
         <div class="alert alert-danger">
             <ul>
@@ -14,12 +14,12 @@
             </ul>
         </div>
         @endif
-        <form action={{url('/situacionocupacional/'.$situacionocupacional->idsituacionOcupacionales)}} method="POST" autocomplete="off">
+        <form action={{url('/movimiento/'.$movimiento->idMovimientoSocial)}} method="POST" autocomplete="off">
             @method('put')
             @csrf
             <div class="form-group">
                 <label for="nombre">Nombre</label>
-                <input type="text" name="nombre" class="form-control" value="{{$situacionocupacional->nombre}}" placeholder="Ingrese nombre">
+                <input type="text" name="nombre" class="form-control" value="{{$movimiento->nombre}}" placeholder="Ingrese nombre">
             </div>
             <div class="form-group">
                 <button class="btn btn-primary" type="submit">Guardar</button>

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Politica;
+use App\Models\Programa;
 class PoliticaController extends Controller
 {
     /**
@@ -13,7 +14,8 @@ class PoliticaController extends Controller
      */
     public function index()
     {
-        //
+        $politicas =Politica::orderBy('idPolitica','desc')->where('estado',1)->paginate(5);
+        return view('politica.index', ['politicas'=>$politicas]);
     }
 
     /**
@@ -23,7 +25,7 @@ class PoliticaController extends Controller
      */
     public function create()
     {
-        //
+        return view('politica.create');
     }
 
     /**
@@ -34,7 +36,23 @@ class PoliticaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $request->validate([
+            'nombre' => 'required|unique:politicas'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de la Politica, no se admiten campos vacios.',
+            'nombre.unique' => 'La Politica que intenta ingresar ya existe.'
+        ]
+    
+        );
+
+        $politica = new Politica;
+        $politica->nombre = $request->get('nombre');
+        $politica->estado = 1;
+        $politica->save();
+
+        return redirect()->route('politica.index');
     }
 
     /**
@@ -45,7 +63,14 @@ class PoliticaController extends Controller
      */
     public function show($id)
     {
-        //
+        $politica = Politica::findOrfail($id);
+        $programas =Programa::orderBy('idPrograma','desc')
+        ->where('idPolitica', $id)
+        ->where('estado',1)
+        ->paginate(5);
+
+        return view('politica.show',['programas'=>$programas, 'idPolitica' => $id,
+        'nombre' => $politica->nombre]);
     }
 
     /**
@@ -56,7 +81,9 @@ class PoliticaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $politica = Politica::findOrFail($id);
+
+        return view('politica.edit',['politica'=>$politica]);
     }
 
     /**
@@ -68,7 +95,19 @@ class PoliticaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nombre' => 'required'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre de la Politica, no se admiten campos vacios.',
+        ]
+        );
+
+        $politica = Politica::findOrFail($id);
+        $politica->nombre = $request->get('nombre');
+        $politica->update();
+
+        return redirect()->route('politica.index');
     }
 
     /**
@@ -79,6 +118,12 @@ class PoliticaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $politica = Politica::findOrFail($id);
+        $politica->estado=0;
+        $politica->update();
+        
+
+
+        return redirect()->route('politica.index');
     }
 }

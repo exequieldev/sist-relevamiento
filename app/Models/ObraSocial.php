@@ -9,9 +9,9 @@ class ObraSocial extends Model
 {
     use HasFactory;
 
-    protected $table = "obrassociales";
+    protected $table = "obrasociales";
 
-    protected $primaryKey = "idObrasSociales";
+    protected $primaryKey = "idObraSocial";
 
     protected $fillable = ['nombre','estado'];
 

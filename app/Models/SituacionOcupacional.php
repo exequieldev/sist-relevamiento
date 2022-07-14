@@ -9,9 +9,9 @@ class SituacionOcupacional extends Model
 {
     use HasFactory;
 
-    protected $table = "situacionesocupacionales";
+    protected $table = "situacionocupacionales";
 
-    protected $primaryKey = "idsituacionesOcupacionales";
+    protected $primaryKey = "idsituacionOcupacional";
 
     protected $fillable = ['nombre','estado'];
 

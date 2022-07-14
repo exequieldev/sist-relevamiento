@@ -11,7 +11,7 @@ class Programa extends Model
 
     protected $table = "programas";
 
-    protected $primaryKey = "idProgramas";
+    protected $primaryKey = "idPrograma";
 
     protected $fillable = ['nombre','estado','idPolitica'];
 

@@ -3,7 +3,7 @@
 @section('content')
   <!--Encabezado-->
   <div class="row">
-    <h1>Situaciones Ocupacionales <a href={{url('situacionocupacional/create')}}><button class="btn btn-success">Nuevo</button></a></h1>
+    <h1>Movimientos Sociales <a href={{url('movimiento/create')}}><button class="btn btn-success">Nuevo</button></a></h1>
   </div>
   <div class="row">
     <div class="col-lg-12 col-md-8 col-sm-8 col-sx-8 ">
@@ -14,15 +14,15 @@
                 <th>Nombre</th>
                 <th>Opciones</th>
             </thead>
-            @foreach ($situacionesocupacionales as $situacionocupacional)
+            @foreach ($movimientos as $movimiento)
               <tr>
-                <td>{{$situacionocupacional->idsituacionOcupacional}}</td>
-                <td>{{$situacionocupacional->nombre}}</td>
+                <td>{{$movimiento->idMovimientoSocial}}</td>
+                <td>{{$movimiento->nombre}}</td>
                 <td>
                       <div class="btn-toolbar">
-                          <a href="{{url('situacionocupacional/'.$situacionocupacional->idsituacionOcupacional.'/edit')}}"><button class="btn btn-info" ><i class="fas fa-edit"></i></button></a>
+                          <a href="{{url('movimiento/'.$movimiento->idMovimientoSocial.'/edit')}}"><button class="btn btn-info" ><i class="fas fa-edit"></i></button></a>
                           <a href="#">
-                              <form action="{{route('situacionocupacional.destroy',$situacionocupacional->idsituacionOcupacional)}}" method="POST">
+                              <form action="{{route('movimiento.destroy',$movimiento->idMovimientoSocial)}}" method="POST">
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
@@ -34,7 +34,7 @@
             @endforeach   
         </table>
     </div>
-    {{$situacionesocupacionales->render()}}
+    {{$movimientos->render()}}
     </div>
   </div>
 

@@ -23,6 +23,11 @@ use App\Models\Embarazo;
 use App\Models\Patologia;
 use App\Models\Ingreso;
 use App\Models\Discapacidad;
+use App\Models\Programa;
+use App\Models\HogarPrograma;
+use App\Models\HogarMovimiento;
+use App\Models\HogarObraSocial;
+use App\Models\HogarInstitucionMedica;
 
 use Illuminate\Http\Request;
 
@@ -96,7 +101,25 @@ class RelevamientoController extends Controller
         $vinculos = DB::table('vinculos')->where('estado', 1)->get()->toArray();
         $generos = DB::table('generos')->where('estado', 1)->get()->toArray();
         $ocupaciones = DB::table('ocupaciones')->where('estado', 1)->get()->toArray();
-        $situacionesocupacionales = DB::table('situacionesocupacionales')->where('estado', 1)->get()->toArray();
+        $situacionesocupacionales = DB::table('situacionocupacionales')->where('estado', 1)->get()->toArray();
+        $obrasociales = DB::table('obrasociales')->where('estado', 1)->get()->toArray();
+
+        $programaSociales = Programa::orderBy('idPrograma', 'desc')
+        ->join('politicas','programas.idPolitica','=','politicas.idPolitica')
+        ->where('programas.estado',1)
+        ->where('politicas.nombre','Sociales')
+        ->select('programas.idPrograma','programas.nombre as programa','programas.monto','politicas.nombre as politica')->get()->toArray();
+        
+        $programaProvinciales = Programa::orderBy('idPrograma', 'desc')
+        ->join('politicas','programas.idPolitica','=','politicas.idPolitica')
+        ->where('programas.estado',1)
+        ->where('politicas.nombre','Provinciales')
+        ->select('programas.idPrograma','programas.nombre as programa','programas.monto','politicas.nombre as politica')
+        ->get()->toArray();
+        
+        $movimientoSocial = DB::table('movimientosociales')->where('estado', 1)->get()->toArray();
+
+        $intitucionMedica = DB::table('institucionmedicas')->where('estado', 1)->get()->toArray();
 
         $habitaciones = Habitacion::where('estado', 1)
         ->whereIn('idHabitacion', DetalleHabitacion::select('idHabitacion'))          //Para controlar que no devuelva una habitacion sin detalles de habitacion registrados.
@@ -107,7 +130,7 @@ class RelevamientoController extends Controller
         ->get();
         
         //dd($construcciones);
-        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones', 'niveles', 'patologias', 'vinculos', 'generos', 'ocupaciones', 'situacionesocupacionales'));
+        return view('relevamiento.create',compact('barrios','manzanas','lotes','detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones', 'niveles', 'patologias', 'vinculos', 'generos', 'ocupaciones', 'situacionesocupacionales','obrasociales','programaSociales','programaProvinciales','movimientoSocial','intitucionMedica'));
     }
 
     /**
@@ -118,6 +141,7 @@ class RelevamientoController extends Controller
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             'numeroHabitacion' => 'required|integer|gt:0',
             'casa' => 'required|numeric|gt:0',
@@ -136,6 +160,7 @@ class RelevamientoController extends Controller
         );
 
         try {
+            //dd('Estamos aca');
             DB::beginTransaction();
             $buscarCasa = BarriosManzana::orderBy('idCasa','desc')->join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')
             ->join('manzanas','barrio_manzanas.idManzana', '=', 'manzanas.idManzana')
@@ -198,7 +223,7 @@ class RelevamientoController extends Controller
             $telefono->idCasa = $casa->idCasa;
             $telefono->save();            
         }
-
+        
 
         $grupos = $request->get('grupos');
         $vinculos = $request->get('vinculos');
@@ -206,7 +231,8 @@ class RelevamientoController extends Controller
         $apellidos = $request->get('apellidos');
         $fechaNac = $request->get('fechaNac');
         $dni = $request->get('dni');
-
+        $obrasociales = $request->get('obraSociales');
+        //dd($grupos);
         $detallescons = $request->input('detallecons');
         //dd($detallescons);
 
@@ -229,11 +255,19 @@ class RelevamientoController extends Controller
     
         $detalleCasa = new DetalleCasa;
         $detalleCasa->idCasa = $casa->idCasa;
-        $detalleCasa->tipoVivienda = 1;
-        $detalleCasa->hacinamiento = 1;
+        if ($request->input('tipoVivienda') == null) {
+            $detalleCasa->tipoVivienda = 0;
+        }else{
+            $detalleCasa->tipoVivienda = 1;
+        }
+        if ($request->input('hacinamiento')==null) {
+            $detalleCasa->hacinamiento = 0;
+        }else{
+            $detalleCasa->hacinamiento = 1;
+        }
         $detalleCasa->numeroHabitacion = $request->input('numeroHabitacion');
         $detalleCasa->save();
-
+        
 
         //La parte de habitaciones esta no funcional, se necesita una unión entre la casa y el detalle de la habitación.
         //La relación de casa con habitacion está mal.
@@ -269,19 +303,36 @@ class RelevamientoController extends Controller
         $situacionesocupacionales = $request->get('situacionesocupacionales');
         $ingresos = $request->get('ingresos');
 
+        $obrasocial = $request->get('obraSociales');
+        $instituto = $request->get('insticuciones');
+        
+        $gruposSocial = $request->get('gruposSocial');
+        $programasSociales = $request->get('programasSociales');
+        $cantidadSocial = $request->get('cantidadSocial');
+        $movimientoSocial = $request->get('movimientoSocial');
+
+        $gruposProvincial = $request->get('gruposProvincial');
+        $programasProvinciales = $request->get('programasProvinciales');
+        $cantidadProvincial = $request->get('cantidadProvincial');
+
+        
         //dd($embarazos, $mesesEmbarazo, $patologias, $patologiapersona, $escolaridad, $niveles, $vinculos, $generos, $ocupaciones, $situacionesocupacionales, $ingresos, $niveles[0]);
-       
+        //dd($obrasocial,$instituto,$gruposSocial,$cantidadSocial,$gruposProvincial,$programasProvinciales,$cantidadProvincial);
         $indice = 1;
-        //dd($grupos);
+        
+        //dd($grupos[array_key_last($grupos)]);
         if(!empty($grupos)){
             for ($j=0; $j < $grupos[array_key_last($grupos)]; $j++){
                 
                 $grupo = new Hogar;
                 $grupo->idCasa = $casa->idCasa;
+                
                 $grupo->save();
+                
                 //dd($grupo->idCasa);
                 //dd($nombres, $apellidos, $dni, $grupo);
                 for ($i=0; $i < count($grupos); $i++) {
+                   
                     if ($grupos[$i] == $indice){
                         $persona = new Persona;
                         //dd($vinculos, $generos);
@@ -293,16 +344,17 @@ class RelevamientoController extends Controller
                         $persona->dni = $dni[$i];   
                         $persona->idhogar = $grupo->idhogar;
                         
-                        
+                        //dd('hola');
+                        //dd($request->get('escolaridad' . strval($i+1))[0],$niveles[$i]);
                         if($request->get('escolaridad' . strval($i+1))[0] != "No" && $niveles[$i] != null && $niveles[$i] != "No"){
                             $persona->idNivel = $niveles[$i];
                         }
                         
                         //dd($situacionesocupacionales[$i]);
                         if($situacionesocupacionales[$i] != null && $situacionesocupacionales[$i] != "No"){
-                            $persona->idsituacionesOcupacionales = $situacionesocupacionales[$i];
+                            $persona->idsituacionOcupacional = $situacionesocupacionales[$i];
                         }
-                  
+                        
                         $persona->save();                                                
                         
                         if($mesesEmbarazo[$i] != 'No'){
@@ -338,11 +390,54 @@ class RelevamientoController extends Controller
                         } 
                     }
                 }
-               
+                
+                for ($i=0; $i < count($gruposSocial); $i++){
+
+                    if ($gruposSocial[$i] == $indice){
+                        $hogarProgramaSocial = new HogarPrograma;
+                        
+                        $hogarProgramaSocial->cantidad = $cantidadSocial[$i];
+
+                        $hogarProgramaSocial->idPrograma = $programasSociales[$i];
+                        
+                        $hogarProgramaSocial->idhogar = $grupo->idhogar;
+                        //dd($cantidadSocial[$i],$programasSociales[$i],$grupo->idhogar);
+                        $hogarProgramaSocial->save();
+                    }
+                }
+                
+                for ($i=0; $i < count($gruposProvincial); $i++){
+
+                    if ($gruposSocial[$i] == $indice){
+                        $hogarProgramaProvincial = new HogarPrograma;
+                        $hogarProgramaProvincial->cantidad = $cantidadProvincial[$i];
+                        $hogarProgramaProvincial->idPrograma = $programasProvinciales[$i];
+                        $hogarProgramaProvincial->idhogar = $grupo->idhogar;
+                        $hogarProgramaProvincial->save();
+                    }
+                }
+                
+                $hogarObraSocial= new HogarObraSocial;
+                $hogarObraSocial->idhogar = $grupo->idhogar;
+                $hogarObraSocial->idObraSocial = $obrasocial[$j];
+                $hogarObraSocial->save();
+                
+                $hogarIntitucionMedica= new HogarInstitucionMedica;
+                $hogarIntitucionMedica->idhogar = $grupo->idhogar;
+                $hogarIntitucionMedica->idInstitucionMedica = $instituto[$j];
+                $hogarIntitucionMedica->save();
+                
+                $hogarMovimientoSocial = new HogarMovimiento;
+                $hogarMovimientoSocial->idMovimientoSocial = $movimientoSocial[$j];
+                $hogarMovimientoSocial->idhogar = $grupo->idhogar;
+                
+                $hogarMovimientoSocial->save();
+                
                $indice++;  
             }
         }
-        //dd("hola");
+        
+        
 
         //Se cambio a esta posición porque innecesariamente asociaba el relevamiento n veces a la misma casa según cuantos grupos pertenecian a la casa.        
         $relevamiento = new Relevamiento;
@@ -352,11 +447,11 @@ class RelevamientoController extends Controller
         $relevamiento->save();
         DB::commit();
         return redirect()->route('relevamiento.index');
-    }catch (\Exception $e) {
-        DB::rollBack();
-        //return response()->json(['message' => 'Error']);
-        return response();
-    }
+     }catch (\Exception $e) {
+         DB::rollBack();
+         //return response()->json(['message' => 'Error']);
+         return response();
+     }
 }
 
     /**

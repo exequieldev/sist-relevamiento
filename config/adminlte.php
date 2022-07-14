@@ -306,7 +306,26 @@ return [
             'url'  => '/nivel',
             'icon' => 'fas fa-graduation-cap',
         ],
-
+        [
+            'text' => 'Movimiento Sociales',
+            'url'  => '/movimiento',
+            'icon' => 'fas fa-user-friends',
+        ],
+        [
+            'text' => 'Obra Social',
+            'url'  => '/obrasocial',
+            'icon' => 'fas fa-hand-holding-medical',
+        ],
+        [
+            'text' => 'Programas Sociales y Provinciales',
+            'url'  => '/politica',
+            'icon' => 'fas fa-landmark',
+        ],
+        [
+            'text' => 'Instituciones Medicas',
+            'url'  => '/categoria',
+            'icon' => 'fas fa-landmark',
+        ],
 
         
         // [

@@ -21,6 +21,11 @@ use App\Http\Controllers\SituacionOcupacionalController;
 use App\Http\Controllers\PatologiaController;
 use App\Http\Controllers\NivelController;
 use App\Http\Controllers\MovimientoSocialController;
+use App\Http\Controllers\ObraSocialController;
+use App\Http\Controllers\PoliticaController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\InstitucionMedicaController;
+use App\Http\Controllers\ProgramaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +51,7 @@ Route::resource('/barrio',BarrioController::class);
 Route::resource('/construccion',ConstruccionController::class);
 Route::resource('/detalleconstruccion',DetalleConstruccionController::class);
 Route::resource('/relevamiento',RelevamientoController::class);
+Route::resource('/habitacion',HabitacionController::class);
 Route::resource('/detallehabitacion',DetalleHabitacionController::class);
 Route::resource('/vinculo', VinculoController::class);
 Route::resource('/genero', GeneroController::class);
@@ -53,4 +59,9 @@ Route::resource('/ocupacion', OcupacionController::class);
 Route::resource('/situacionocupacional', SituacionOcupacionalController::class);
 Route::resource('/patologia', PatologiaController::class);
 Route::resource('/nivel', NivelController::class);
-Route::resource('/movimientosocial',MovimientoSocialController::class);
+Route::resource('/movimiento',MovimientoSocialController::class);
+Route::resource('/obrasocial',ObraSocialController::class);
+Route::resource('/politica',PoliticaController::class);
+Route::resource('/programa',ProgramaController::class);
+Route::resource('/categoria',CategoriaController::class);
+Route::resource('/institucion',InstitucionMedicaController::class);

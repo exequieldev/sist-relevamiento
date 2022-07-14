@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Programa;
 
 class ProgramaController extends Controller
 {
@@ -34,7 +35,23 @@ class ProgramaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|unique:programas'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre del programa, no se admiten campos vacios.',
+            'nombre.unique' => 'El nomrbre del programa que intenta ingresar ya existe.'
+        ]
+    
+        );
+        $programa = new Programa;
+        $programa->nombre = $request->get('nombre');
+        $programa->monto = $request->get('monto');
+        $programa->estado = 1;
+        $programa->idPolitica = $request->get('politica');
+        $programa->save();
+
+        return redirect()->route('politica.show', $programa->idPolitica);
     }
 
     /**
@@ -56,7 +73,9 @@ class ProgramaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $programa = Programa::findOrFail($id);
+
+        return view('programa.edit',['programa'=>$programa]);
     }
 
     /**
@@ -68,7 +87,20 @@ class ProgramaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nombre' => 'required'
+        ],
+        [
+            'nombre.required' => 'Debe especificar un nombre del programa, no se admiten campos vacios.'
+        ]
+    
+        );
+        $programa = Programa::findOrFail($id);
+        $programa->nombre = $request->get('nombre');
+        $programa->monto = $request->get('monto');
+        $programa->update();
+
+        return redirect()->route('politica.show', $programa->idPolitica);
     }
 
     /**
@@ -79,6 +111,12 @@ class ProgramaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $programa = Programa::findOrFail($id);
+        $programa->estado=0;
+        $programa->update();
+        
+
+
+        return redirect()->route('politica.show', $programa->idPolitica);
     }
 }

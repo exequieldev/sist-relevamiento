@@ -334,7 +334,11 @@ var vinculos = <?php echo json_encode($vinculos); ?>;
 var generos = <?php echo json_encode($generos); ?>;
 var ocupaciones = <?php echo json_encode($ocupaciones); ?>;
 var situacionesocupacionales = <?php echo json_encode($situacionesocupacionales); ?>;
-
+var obrasociales = <?php echo json_encode($obrasociales); ?>;
+var programaProvincial = <?php echo json_encode($programaProvinciales); ?>;
+var programaSocial = <?php echo json_encode($programaSociales); ?>;
+var movimientoSocial = <?php echo json_encode($movimientoSocial); ?>;
+var instituciones = <?php echo json_encode($intitucionMedica); ?>;
 
 document.getElementById("btn_accordion").addEventListener("click", function(event){
   event.preventDefault();
@@ -456,17 +460,17 @@ function crearAcordeon(){
                 //Obra Social
                 modal = modal + '<div class="form-group"><label for="">Obra Social</label></div>';
                 modal = modal + '<div class="form-group" id="obraSociales'+incrementador+'"><select class="form-control" name="obraSociales[]" id=""><option selected disabled>Seleccione...</option>';
-                // for(i=0; i<instituciones.length; i++){
-                //      modal = modal + '<option value="'+ instituciones[i].idInstiucionesMedicas +'">' + instituciones[i].nombre + '</option>';
-                // }
+                for(i=0; i<obrasociales.length; i++){
+                    modal = modal + '<option value="'+ obrasociales[i].idObraSocial +'">' + obrasociales[i].nombre + '</option>';
+                }
                 modal = modal + '</select></div>';
                 
                   //Instituciones Medicas
                 modal = modal + '<div class="form-group"><label for="">Institucion Medica</label></div>';
                 modal = modal + '<div class="form-group" id="insticuciones'+incrementador+'"><select class="form-control" name="insticuciones[]" id=""><option selected disabled>Seleccione...</option>';
-                // for(i=0; i<instituciones.length; i++){
-                //      modal = modal + '<option value="'+ instituciones[i].idInstiucionesMedicas +'">' + instituciones[i].nombre + '</option>';
-                // }
+                for(i=0; i<instituciones.length; i++){
+                     modal = modal + '<option value="'+ instituciones[i].idInstitucionMedica +'">' + instituciones[i].nombre + '</option>';
+                }
                 modal = modal + '</select></div>';
 
                 //Botones
@@ -495,16 +499,39 @@ function crearAcordeon(){
 
                 //Programas Sociales
                 modal = modal + '<div class="form-group"><h3 for="">Programas Sociales</h3></div>';
-                modal = modal + '<p"><label>Nombre del programas Social</label><input class="ml-3" placeholder="Cantidad"></input></p>';
-                modal = modal + '<p><label>Nombre del programas Social </label><input class="ml-3" placeholder="Cantidad"></input></p>';
-                modal = modal + '<p><label>Nombre del programas Social </label><input class="ml-3" placeholder="Cantidad"></input></p>';
+                modal = modal + '<div class="form-group" ><select class="form-control"  id="programaSociales'+incrementador+'"><option selected disabled>Seleccione Programa...</option>';
+                for(i=0; i<programaSocial.length; i++){
+                      modal = modal + '<option value="'+ programaSocial[i].idPrograma +'">' + programaSocial[i].programa + '</option>';
+                }
+                modal = modal + '</select></div>';
+
+                modal = modal + '<div class="row">'
+                modal = modal + '<div class="form-group col-lg-6 col-md-6 col-sd-6 col-xs-6 mb-0">';
+                modal = modal + '<div class="form-group">' + '<label for="dni">Cantidad</label>';
+                modal = modal + '<input type="text" id="cantidadSocial' + incrementador + '" class="form-control" placeholder="Ingrese Cantidad">' + '</div>' + '</div>' ;
+
+                modal = modal + '<div class="form-group col-lg-6 col-md-6 col-sd-6 col-xs-6 mb-0">';
+                modal = modal + '<div class="form-group">';
+                modal = modal + '<label for="" style="visibility:hidden">Agregar Programa</label>';
+                modal = modal + '<button class="form-control" id="btn_add" onclick="agregarPoliticaSocial(' + incrementador + '),event.preventDefault()">Agregar Programa</button>';
+                modal = modal + '</div>' + '</div>';
+                modal = modal + '</div>'
+
+                modal = modal + '<div class="form-group col-lg-12 col-md-12 col-sd-12 col-xs-12 mb-0">';
+                modal = modal + '<div class="row table-responsive">';
+                modal = modal + '<div class="table-responsive">';
+                modal = modal + '<table class="col-sm-12 table-bordered table-striped table-condensed ">';
+                modal = modal + '<thead>' + '<th scope="col">#</th>' + '<th scope="col">Programa</th>' + '<th scope="col">Cantidad</th>' + ' </tr>' + ' </thead>' + '<tbody id="tbsocial' + incrementador + '">' + '</tbody>' + '</table>' + ' </div>' + ' </div>';
+                modal = modal + '</div>'
+                modal = modal + '<br>'
+
 
                 //Moviento Social
                 modal = modal + '<div class="form-group"><h3 for="">Movimiento Social</h3></div>';
-                modal = modal + '<div class="form-group" id="obraSociales'+incrementador+'"><select class="form-control" name="obraSociales[]" id=""><option selected disabled>Seleccione...</option>';
-                // for(i=0; i<instituciones.length; i++){
-                //      modal = modal + '<option value="'+ instituciones[i].idInstiucionesMedicas +'">' + instituciones[i].nombre + '</option>';
-                // }
+                modal = modal + '<div class="form-group" id="movimientoSocial'+incrementador+'"><select class="form-control" name="movimientoSocial[]" id=""><option selected disabled>Seleccione...</option>';
+                for(i=0; i<movimientoSocial.length; i++){
+                      modal = modal + '<option value="'+ movimientoSocial[i].idMovimientoSocial +'">' + movimientoSocial[i].nombre + '</option>';
+                }
                 modal = modal + '</select></div>';
 
                 //Botones
@@ -521,21 +548,43 @@ function crearAcordeon(){
 
     //Politicas Provinciales
     //Cabecera Modal
-    modal =         '<div class="modal fade" id="politicasProvinciales'+incrementador+'" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">'
+                modal =         '<div class="modal fade" id="politicasProvinciales'+incrementador+'" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">'
                 modal = modal + '<div class="modal-dialog">'
                 modal = modal + '<div class="modal-content">'
 
-                modal = modal + '<div class="modal-header"><h5 class="modal-title" id="staticBackdropLabel">Politicas Sociales</h5>'
+                modal = modal + '<div class="modal-header"><h5 class="modal-title" id="staticBackdropLabel">Politicas Provinciales</h5>'
                 modal = modal + '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
                 modal = modal + '</div>'
 
                 modal = modal +  '<div class="modal-body">'
 
-                //Programas Sociales
+                //Programas Provinciales
                 modal = modal + '<div class="form-group"><h3 for="">Programas Provinciales</h3></div>';
-                modal = modal + '<p"><label>Nombre del programas Social</label><input class="ml-3" placeholder="Cantidad"></input></p>';
-                modal = modal + '<p><label>Nombre del programas Social </label><input class="ml-3" placeholder="Cantidad"></input></p>';
-                modal = modal + '<p><label>Nombre del programas Social </label><input class="ml-3" placeholder="Cantidad"></input></p>';
+                modal = modal + '<div class="form-group"><select class="form-control" id="programaProvincial'+incrementador+'"><option selected disabled>Seleccione Programa...</option>';
+                for(i=0; i<programaProvincial.length; i++){
+                      modal = modal + '<option value="'+ programaProvincial[i].idPrograma +'">' + programaProvincial[i].programa + '</option>';
+                }
+                modal = modal + '</select></div>';
+
+                modal = modal + '<div class="row">'
+                modal = modal + '<div class="form-group col-lg-6 col-md-6 col-sd-6 col-xs-6 mb-0">';
+                modal = modal + '<div class="form-group">' + '<label for="dni">Cantidad</label>';
+                modal = modal + '<input type="text" id="cantidadProvincial' + incrementador + '" class="form-control" placeholder="Ingrese Cantidad">' + '</div>' + '</div>' ;
+
+                modal = modal + '<div class="form-group col-lg-6 col-md-6 col-sd-6 col-xs-6 mb-0">';
+                modal = modal + '<div class="form-group">';
+                modal = modal + '<label for="" style="visibility:hidden">Agregar Programa</label>';
+                modal = modal + '<button class="form-control" id="btn_add" onclick="agregarPoliticaProvincial(' + incrementador + '),event.preventDefault()">Agregar Programa</button>';
+                modal = modal + '</div>' + '</div>';
+                modal = modal + '</div>'
+
+                modal = modal + '<div class="form-group col-lg-12 col-md-12 col-sd-12 col-xs-12 mb-0">';
+                modal = modal + '<div class="row table-responsive">';
+                modal = modal + '<div class="table-responsive">';
+                modal = modal + '<table class="col-sm-12 table-bordered table-striped table-condensed ">';
+                modal = modal + '<thead>' + '<th scope="col">#</th>' + '<th scope="col">Programa</th>' + '<th scope="col">Cantidad</th>' + ' </tr>' + ' </thead>' + '<tbody id="tbprovincial' + incrementador + '">' + '</tbody>' + '</table>' + ' </div>' + ' </div>';
+                modal = modal + '</div>'
+                modal = modal + '<br>'
                 
                 //Botones
                 modal = modal + '<div class="modal-footer">'
@@ -684,7 +733,7 @@ function agregar(inc){
                   modal = modal +  '<div class="form-group"><label for="">Trabajo Registrado</label><select class="form-control" name="situacionesocupacionales[]" id=""><option selected value="No">Seleccione...</option>';
                 
                   for(i=0; i<situacionesocupacionales.length; i++){
-                      modal = modal + '<option value="'+ situacionesocupacionales[i].idsituacionesOcupacionales +'">' + situacionesocupacionales[i].nombre + '</option>';
+                      modal = modal + '<option value="'+ situacionesocupacionales[i].idsituacionOcupacionales +'">' + situacionesocupacionales[i].nombre + '</option>';
                   }
                   modal = modal + '</select></div>';
   
@@ -721,29 +770,69 @@ function agregar(inc){
 }
 }
 
-function detalle(){
-    this.addEventListener("click", (e) => {
-        e.preventDefault();
-    });
-}
-
-function mesesEmb(pers, id){
-
-  $mesesembarazo = document.getElementById('mesesembarazo'+pers);
-  console.log(id, pers);
+ function agregarPoliticaSocial(inc){
+   selectPrograma = document.getElementById("programaSociales"+ inc);
+   programa = selectPrograma.value;
+   textoprograma = selectPrograma.options[selectPrograma.selectedIndex].text;
   
-  console.log(id.includes('noembarazada'), "no embarazada");
-  console.log(id.includes('siembarazada'), "embarazada");
-  
+   cantidadSocial = $("#cantidadSocial" + inc).val();
+    if (selectPrograma.selectedIndex != 0 && cantidadSocial != ""){
+              var fila = '<tr>';
+                  fila = fila + '<td>' + '<input type="hidden" name="gruposSocial[]" value="'+inc+'">'+'</td>';
+                  fila = fila + '<td><input type="hidden" name="programasSociales[]" value="' + programa + '">' + textoprograma + '</td>' ;
+                  fila = fila + '<td><input type="hidden" name="cantidadSocial[]" value="' + cantidadSocial + '">' + cantidadSocial + '</td>' ;
+                  fila = fila + '</tr>' ;
+                  $("#tbsocial" + inc).append(fila) ;
+    }
 
-  if (id != null && id.includes('noembarazada') && $mesesembarazo != null){
-    $mesesembarazo.style.display = "none";
+   document.getElementById("programaSociales" + inc).selectedIndex = 0;
+   $("#cantidadSocial" + inc).val("");
+
+ }
+
+  function agregarPoliticaProvincial(inc){
+    selectPrograma = document.getElementById("programaProvincial"+ inc);
+    programa = selectPrograma.value;
+    textoprograma = selectPrograma.options[selectPrograma.selectedIndex].text;
+
+    cantidadProvincial = $("#cantidadProvincial" + inc).val();
+    console.log(cantidadProvincial);
+
+    if (selectPrograma.selectedIndex != 0 && cantidadProvincial != ""){
+              var fila = '<tr>';
+                  fila = fila + '<td>' + '<input type="hidden" name="gruposProvincial[]" value="'+inc+'">'+'</td>';
+                  fila = fila + '<td><input type="hidden" name="programasProvinciales[]" value="' + programa + '">' + textoprograma + '</td>' ;
+                  fila = fila + '<td><input type="hidden" name="cantidadProvincial[]" value="' + cantidadProvincial + '">' + cantidadProvincial + '</td>' ;
+                  fila = fila + '</tr>' ;
+                  limpiar(inc);
+
+                  $("#tbprovincial" + inc).append(fila) ;
+    }
   }
 
-  if (id != null && id.includes('siembarazada') && $mesesembarazo != null){
-    $mesesembarazo.style.display = "";
-  }
-}
+ function detalle(){
+     this.addEventListener("click", (e) => {
+         e.preventDefault();
+     });
+ }
+
+ function mesesEmb(pers, id){
+
+   $mesesembarazo = document.getElementById('mesesembarazo'+pers);
+   console.log(id, pers);
+  
+   console.log(id.includes('noembarazada'), "no embarazada");
+   console.log(id.includes('siembarazada'), "embarazada");
+  
+
+   if (id != null && id.includes('noembarazada') && $mesesembarazo != null){
+     $mesesembarazo.style.display = "none";
+   }
+
+   if (id != null && id.includes('siembarazada') && $mesesembarazo != null){
+     $mesesembarazo.style.display = "";
+   }
+ }
 
 function patologiaPersona(pers, id){
 
