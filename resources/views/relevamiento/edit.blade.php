@@ -33,7 +33,42 @@
                     <div class="form-group">
                         <label for="casa">Casa N°</label>
                         <input type="text" name="casa" class="form-control" value="{{$casa->numeroCasa}}" placeholder="Ingrese numero de la casa">
+                    </div>
+                </div>
+                <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
+                    <div class="form-group">
+                        <label for="barrios">Barrio</label>
                         
+                        <select class="form-control" name="barrios" id="">
+                        <option {{$relevamientosGeneral->barrioId}}>{{$relevamientosGeneral->nombre}}</option>
+                        @foreach ($barrios as $barrio)
+                            <option value={{$barrio->idBarrio}}>{{$barrio->nombre}}</option>
+                        @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
+                    <div class="form-group">
+                        <label for="barrios">Manzana</label>
+                        
+                        <select class="form-control" name="numeroManzana" id="">
+                        <option value={{$relevamientosGeneral->manzanaId}}>{{$relevamientosGeneral->manzanaNumero}}</option>
+                        @foreach ($manzanas as $manzana)
+                            <option value={{$manzana->idManzana}}>{{$manzana->numero}}</option>
+                        @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
+                    <div class="form-group">
+                        <label for="divisionManzana">Letra Manzana</label>
+                        
+                        <select class="form-control" name="divisionManzana" id="">
+                        <option value={{$relevamientosGeneral->manzanaId}}>{{$relevamientosGeneral->manzanaDivision}}</option>
+                        @foreach ($manzanas as $manzana)
+                            <option value={{$manzana->idManzana}}>{{$manzana->division}}</option>
+                        @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">

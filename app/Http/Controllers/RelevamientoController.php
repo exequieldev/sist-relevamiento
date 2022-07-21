@@ -141,7 +141,7 @@ class RelevamientoController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $request->validate([
             'numeroHabitacion' => 'required|integer|gt:0',
             'casa' => 'required|numeric|gt:0',
@@ -167,12 +167,12 @@ class RelevamientoController extends Controller
             ->join('manzana_lotes','manzana_lotes.idManzana','=','manzanas.idManzana')
             ->join('lotes','lotes.idLote','=', 'manzana_lotes.idLote')
             ->join('casas','lotes.idLote' ,'=' ,'casas.idLote')
-            ->where('barrios.nombre','=','Canteras')
+            ->where('barrios.idBarrio','=',$request->barrio)
             ->where('casas.numeroCasa','=',$request->casa)
             ->select('casas.numeroCasa as nombre','lotes.idLote as Lote','casas.idCasa','casas.division')
             ->first();
 
-            
+            //dd($buscarCasa);
             if(!empty($buscarCasa)){
                 
                 $casa = new Casa;
@@ -189,6 +189,7 @@ class RelevamientoController extends Controller
                 
                 $casa->estado = 1;
                 $casa->save();
+                
                 
             }else{
                 $manzana=BarriosManzana::join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')
@@ -441,7 +442,8 @@ class RelevamientoController extends Controller
 
         //Se cambio a esta posición porque innecesariamente asociaba el relevamiento n veces a la misma casa según cuantos grupos pertenecian a la casa.        
         $relevamiento = new Relevamiento;
-        $relevamiento->fechaDesde = '2022-06-08';
+        $fecha = date("Y")."-".date("m")."-".date("d");
+        $relevamiento->fechaDesde = $fecha;
         $relevamiento->idCasa = $casa->idCasa;
         $relevamiento->estado = 1;
         $relevamiento->save();
@@ -537,6 +539,7 @@ class RelevamientoController extends Controller
     {
         $relevamiento = $id;
 
+
         $hogares = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
         ->join('hogares','hogares.idCasa', '=', 'casas.idCasa')->where('idRelevamiento', $id)->count();
         //dd($hogares);
@@ -552,6 +555,25 @@ class RelevamientoController extends Controller
         ->where('idRelevamiento', $id)
         ->select('casas.numeroCasa')->first();
         //dd($casa);
+
+        $relevamientosGeneral = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
+            ->join('lotes','lotes.idLote','=', 'casas.idLote')
+            ->join('manzana_lotes','manzana_lotes.idLote','=','lotes.idLote')
+            ->join('manzanas','manzanas.idManzana','=','manzana_lotes.idManzana')
+            ->join('barrio_manzanas','barrio_manzanas.idManzana','=','manzanas.idManzana')
+            ->join('barrios','barrios.idBarrio','=','barrio_manzanas.idBarrio')
+            ->where('relevamientos.estado', 1)
+            ->where('casas.numeroCasa', $casa->numeroCasa)
+            ->select('relevamientos.fechaDesde as fechaDesde','barrios.idBarrio as barrioId','barrios.nombre as nombre','manzanas.idManzana as manzanaId','manzanas.numero as manzanaNumero','manzanas.division as manzanaDivision','lotes.numero as lote','casas.numeroCasa as casa','casas.division as division')
+            ->groupBy('casas.division')
+            ->first();
+        //dd($relevamientosGeneral);
+        //$barrios = Barrio::all();
+        //dd($relevamientosGeneral->nombre);
+        $barrios=Barrio::orderBy('idBarrio','desc')->where('nombre','!=',$relevamientosGeneral->nombre)->get();
+        //$manzanas = Manzana::all();
+        $manzanas=Manzana::orderBy('idManzana','desc')->where('numero','!=','Sin Numero')->get();
+        //$barrios = Lote::all();
 
         $telefono = Relevamiento::join('casas','relevamientos.idCasa','=','casas.idCasa')
         ->join('telefonos','casas.idCasa','=','telefonos.idCasa')
@@ -610,7 +632,7 @@ class RelevamientoController extends Controller
         ->get();
         
         //dd($construcciones);
-        return view('relevamiento.edit',compact('detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones', 'casa', 'telefono', 'detallesconsrel', 'hogares', 'canthogares', 'detallecasa', 'detalleshabsrel', 'personas', 'relevamiento'));
+        return view('relevamiento.edit',compact('detalleConstrucciones','construcciones','habitaciones','detalleHabitaciones', 'casa', 'telefono', 'detallesconsrel', 'hogares', 'canthogares', 'detallecasa', 'detalleshabsrel', 'personas', 'relevamiento','relevamientosGeneral','barrios','manzanas'));
     }
 
     /**

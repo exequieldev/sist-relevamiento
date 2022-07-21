@@ -27,15 +27,26 @@
                 </select>
               </div> --}}
 
-               
-                <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
+                <div class="form-group col-lg-3 col-md-3 col-sd-3 col-xs-3 mb-0">
+                    <div class="form-group">
+                        <label for="casa">Barrio</label>
+                        <select class="form-control" name="barrio">
+                          <option selected disabled >Seleccione...</option>
+                          @foreach ($barrios as $barrio)
+                              <option value={{$barrio->idBarrio}}>{{$barrio->nombre}}</option>
+                          @endforeach
+                        </select>
+                        
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 col-md-3 col-sd-3 col-xs-3 mb-0">
                     <div class="form-group">
                         <label for="casa">Casa N°</label>
                         <input type="text" name="casa" value="{{old('casa')}}" class="form-control" placeholder="Ingrese numero de la casa">
                         
                     </div>
                 </div>
-                <div class="form-group col-lg-2 col-md-2 col-sd-2 col-xs-2 mb-0">
+                <div class="form-group col-lg-3 col-md-3 col-sd-3 col-xs-3 mb-0">
                     <div class="form-group">
                         <label for="numeroTelefono">Numero Telefono</label>
                         <input type="text" name="telefono" class="form-control" placeholder="Ingrese el numero de telefono">

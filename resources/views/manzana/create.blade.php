@@ -17,9 +17,25 @@
       <form action={{url('/manzana')}} method="POST" autocomplete="off">
           @csrf
           <div class="form-group">
-              <label for="descripcion">Descripcion</label>
-              <input type="text" name="descripcion" class="form-control" placeholder="Ingrese descripcion">
+              <label for="barrios">Barrios</label>
+              
+              <select class="form-control" name="barrios" id="">
+                <option selected disabled>Seleccione...</option>
+                @foreach ($barrios as $barrio)
+                    <option value={{$barrio->idBarrio}}>{{$barrio->nombre}}</option>
+                @endforeach
+              </select>
           </div>
+          <div class="form-group">
+            <label for="numeroManzana">Numero Manzana</label>
+            <input type="text" name="numeroManzana" class="form-control" placeholder="Ingrese numero de manzana">
+          </div>
+          <div class="form-group">
+            <label for="divisionManzana">Letra Manzana</label>
+            <input type="text" name="divisionManzana" class="form-control" placeholder="Ingrese letra de manzana">
+          </div>
+
+
           <div class="form-group">
               <button class="btn btn-primary" type="submit">Guardar</button>
               <button class="btn btn-danger" type="reset">Cancelar</button>

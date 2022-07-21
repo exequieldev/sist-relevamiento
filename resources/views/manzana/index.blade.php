@@ -11,18 +11,22 @@
         <table class="table table-streped table-bordered table-condensed table-hover">
             <thead>
                 <th>Id</th>
-                <th>Número</th>
+                <th>Barrio</th>
+                <th>Numero Manzana</th>
+                <th>Letra Manzana</th>
                 <th>Opciones</th>
             </thead>
             @foreach ($manzanas as $manzana)
               <tr>
-                <td>{{$manzana->idManzana}}</td>
+                <td>{{$manzana->numeracion}}</td>
+                <td>{{$manzana->barrio}}</td>
                 <td>{{$manzana->numero}}</td>
+                <td>{{$manzana->division}}</td>
                 <td>
                       <div class="btn-toolbar">
-                          <a href="{{url('manzana/'.$manzana->idManzana.'/edit')}}"><button class="btn btn-info" ><i class="fas fa-edit"></i></button></a>
+                          <a href="{{url('manzana/'.$manzana->numeracion.'/edit')}}"><button class="btn btn-info" ><i class="fas fa-edit"></i></button></a>
                           <a href="#">
-                              <form action="{{route('manzana.destroy',$manzana->idManzana)}}" method="POST">
+                              <form action="{{route('manzana.destroy',$manzana->numeracion)}}" method="POST">
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>

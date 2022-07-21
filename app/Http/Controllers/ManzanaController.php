@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Manzana;
+use App\Models\Barrio;
+use App\Models\BarriosManzana;
+
 use DB;
 use Illuminate\Http\Request;
 
@@ -15,8 +18,14 @@ class ManzanaController extends Controller
      */
     public function index()
     {
-        $manzanas=Manzana::orderBy('idManzana','desc')->where('estado',1)->paginate(5);
-       return view('manzana.index', ['manzanas'=>$manzanas]);
+        //$manzanas=Manzana::orderBy('idManzana','desc')->where('estado',1)->paginate(5);
+        $manzanas=BarriosManzana::orderBy('idBarrio_Manzanas','desc')
+        ->join('barrios','barrio_manzanas.idBarrio','=','barrios.idBarrio')
+        ->join('manzanas','barrio_manzanas.idManzana','=','manzanas.idManzana')
+        ->select('barrio_manzanas.idBarrio_Manzanas as numeracion','barrios.nombre as barrio','manzanas.numero','manzanas.division')
+        ->paginate(5);
+        //dd($manzanas);
+        return view('manzana.index', ['manzanas'=>$manzanas]);
     }
 
     /**
@@ -26,7 +35,8 @@ class ManzanaController extends Controller
      */
     public function create()
     {
-        return view('manzana.create');
+        $barrios = Barrio::all();
+        return view('manzana.create',compact('barrios'));
     }
 
     /**
@@ -37,10 +47,17 @@ class ManzanaController extends Controller
      */
     public function store(Request $request)
     {
+        
         $manzana = new Manzana;
-        $manzana->descripcion = $request->get('descripcion');
+        $manzana->numero = $request->get('numeroManzana');
+        $manzana->division = $request->get('divisionManzana');
         $manzana->estado = 1;
         $manzana->save();
+
+        $barrioManzana = new BarriosManzana;
+        $barrioManzana->idBarrio = $request->get('barrios');
+        $barrioManzana->idManzana = $manzana->idManzana;
+        $barrioManzana->save();
 
         return redirect()->route('manzana.index');
     }
